@@ -81,10 +81,6 @@ onMounted(() => {
     })
   })
 })
-
-console.log(generateColour())
-console.log(generateColour())
-console.log(generateColour())
 </script>
 
 <style scoped>
