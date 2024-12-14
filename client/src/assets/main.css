@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+  --header: 5rem;
+
+  --primary: rgb(4, 125, 4);
+  --neutral: rgba(255, 255, 255, 1);
+
+  --bebas: 'Bebas Neue', sans-serif;
+  --playfair: 'Playfair Display', serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  scroll-padding-block: var(--header);
+}
+
+body {
+  /* background-color: rgb(226, 249, 226); */
+  width: 100%;
+  height: 100dvh;
+  position: relative;
+  overflow: hidden;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+input,
+button,
+textarea {
+  border: none;
+  outline: none;
+  appearance: none;
+  background-color: transparent;
+}
+
+section:not(section.hero) {
+  padding-block: calc(var(--header) + 3rem) var(--header);
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+}
+
+.hero {
+  height: calc(100dvh - 4.5rem);
+
+  background-image: url(./images/hero_bg-removebg-preview.png);
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: 60%;
+}
+
+.hero__wrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+}
+
+.cta__btn {
+  border: 1px solid rgb(76 175 80);
+  padding: 0.75rem 2.5rem;
+  border-radius: 20px;
+  color: white;
+  font-size: 18px;
+  background-color: rgb(76 175 80);
+  transition: all 0.5s ease;
+  font-weight: 500;
+}
+
+.cta__btn-alt,
+.cta__btn:hover {
+  color: rgb(76 175 80) !important;
+  background-color: transparent !important;
+}
+
+.cta__btn-alt:hover {
+  color: white !important;
+  background-color: rgb(76 175 80) !important;
+}
