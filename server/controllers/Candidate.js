@@ -8,7 +8,6 @@ import { asyncHandler } from '../utils/async_handler.js';
 
 export const getAllCandidates = asyncHandler(async (req, res) => {
 	try {
-		console.log('This is accessed');
 		const candidates = await Candidate.find()
 			.populate('user')
 			.orFail()
