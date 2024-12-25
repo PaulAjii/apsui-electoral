@@ -8,6 +8,7 @@ import { asyncHandler } from '../utils/async_handler.js';
 
 export const getAllCandidates = asyncHandler(async (req, res) => {
 	try {
+		console.log('This is accessed');
 		const candidates = await Candidate.find()
 			.populate('user')
 			.orFail()
@@ -21,6 +22,7 @@ export const getAllCandidates = asyncHandler(async (req, res) => {
 		}
 		res.status(StatusCodes.OK).json({
 			status: 1,
+			no_of_candidates: candidates.length,
 			candidates,
 		});
 	} catch (err) {
@@ -120,8 +122,8 @@ export const createCandidate = asyncHandler(async (req, res) => {
 
 		imageURL =
 			gender === GenderEnum.MALE
-				? 'https://www.freepik.com/free-vector/man-red-shirt-with-white-collar_226744976.htm#fromView=search&page=1&position=36&uuid=ff053316-6eeb-432b-b5c2-0a5603c897a1'
-				: 'https://www.freepik.com/free-vector/flat-style-woman-avatar_226744995.htm#fromView=search&page=1&position=44&uuid=ff053316-6eeb-432b-b5c2-0a5603c897a1';
+				? 'https://img.freepik.com/free-vector/man-red-shirt-with-white-collar_90220-2873.jpg?t=st=1734931038~exp=1734934638~hmac=ee7f3a65ff99caff838f2d456f6da5b189ba275e653399dc89dc37f7a1bc0a31&w=826'
+				: 'https://img.freepik.com/free-vector/flat-style-woman-avatar_90220-2876.jpg?t=st=1734931428~exp=1734935028~hmac=9c00700cba2b3f69fab54446bc7de2417057ee4e5a3202f81e4304bb8150153d&w=826';
 
 		const candidateInstance = new Candidate({
 			...req.body,

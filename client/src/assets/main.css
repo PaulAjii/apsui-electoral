@@ -26,7 +26,6 @@ html {
 }
 
 body {
-  /* background-color: rgb(226, 249, 226); */
   width: 100%;
   height: 100dvh;
   position: relative;
@@ -42,6 +41,12 @@ a {
   color: inherit;
 }
 
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 input,
 button,
 textarea {
@@ -49,10 +54,6 @@ textarea {
   outline: none;
   appearance: none;
   background-color: transparent;
-}
-
-section:not(section.hero) {
-  padding-block: calc(var(--header) + 3rem) var(--header);
 }
 
 .wrapper {
@@ -98,4 +99,14 @@ section:not(section.hero) {
 .cta__btn-alt:hover {
   color: white !important;
   background-color: rgb(76 175 80) !important;
+}
+
+.candidates__section {
+  padding-block: 2rem;
+}
+
+.candidates__wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
 }

@@ -41,6 +41,7 @@ export const getUsers = async (req, res) => {
 
 		res.status(StatusCodes.OK).json({
 			status: 1,
+			no_of_users: users.length,
 			users,
 		});
 	} catch (err) {

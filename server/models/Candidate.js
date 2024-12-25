@@ -11,7 +11,7 @@ export const PositionsByLevel = {
 	[ContestLevelEnum['200']]: [
 		'Treasurer',
 		'Financial Secretary',
-		'Social DIrector',
+		'Social Director',
 		'Sports Secretary',
 		'Assistant General Secretary',
 	],
@@ -64,6 +64,11 @@ const candidateSchema = new mongoose.Schema(
 
 		imageURL: {
 			type: String,
+		},
+
+		catchPhrase: {
+			type: String,
+			default: 'Another Level!',
 		},
 
 		votesCount: {
