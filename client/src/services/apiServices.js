@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { errorHandler } from '@/utils'
 
 const apiClient = axios.create({
   baseURL: 'http://localhost:5000/api/v1',
@@ -13,8 +14,7 @@ export const getCandidates = async () => {
 
     return data
   } catch (err) {
-    console.error('Error Fetching Data...', err.message)
-    throw err
+      errorHandler(err)
   }
 }
 
@@ -24,7 +24,16 @@ export const addCandidate = async (candidateData) => {
 
     return data
   } catch (err) {
-    console.error('Error adding candidate...', err.message)
-    throw err
+      errorHandler(err)
+  }
+}
+
+export const removeCandidate = async (id) => {
+  try {
+    const { data } = await apiClient.delete(`/candidates/${ id }`)
+
+    return data
+  } catch (err) {
+      errorHandler(err)
   }
 }

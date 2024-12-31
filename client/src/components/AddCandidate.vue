@@ -1,36 +1,49 @@
 <template>
   <div class="modal-overlay" @click.self="$emit('close')">
     <div class="modal-content">
-      <h2>Add New Candidate</h2>
+      <h2>Add a New Candidate</h2>
       <form @submit.prevent="handleSubmit">
         <div class="form-group">
           <label for="name">Name</label>
-          <input type="text" id="name" v-model="formData.name" required />
+          <input type="text" id="name" v-model="formData.name" placeholder="John Doe" required />
         </div>
 
         <div class="form-group">
           <label for="studentID">Student ID</label>
-          <input type="text" id="studentID" v-model="formData.studentId" required />
+          <input
+            type="text"
+            id="studentID"
+            v-model="formData.studentId"
+            placeholder="234612"
+            required
+          />
         </div>
 
         <div class="form-group">
           <label for="alias">Alias</label>
-          <input type="text" id="alias" v-model="formData.alias" />
+          <input type="text" id="alias" v-model="formData.alias" placeholder="johnny" />
         </div>
 
         <div class="form-group">
           <label for="position">Position</label>
-          <input type="text" id="position" v-model="formData.position" required />
+          <input
+            type="text"
+            id="position"
+            v-model="formData.position"
+            placeholder="Social Director"
+            required
+          />
         </div>
 
         <div class="form-group">
           <label for="level">Level</label>
+          <!-- ! Make this from the list of possible contesting class -->
           <select name="level" id="level" v-model="formData.level" required>
-            <option value="100" selected>100</option>
+            <option value="" selected>Select Level</option>
+            <option value="100">100</option>
             <option value="200">200</option>
             <option value="300">300</option>
             <option value="400">400</option>
-            <option value="500">500</option>
           </select>
         </div>
 
@@ -45,7 +58,11 @@
 
         <div class="form-group">
           <label for="catchPhrase">Catch Phrase</label>
-          <textarea id="catchPhrase" v-model="formData.catchPhrase"></textarea>
+          <textarea
+            id="catchPhrase"
+            v-model="formData.catchPhrase"
+            placeholder="lorem ipsum..."
+          ></textarea>
         </div>
 
         <div class="form-actions">

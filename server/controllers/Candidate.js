@@ -42,7 +42,10 @@ export const getSingleCandidate = asyncHandler(async (req, res) => {
 			.exec();
 
 		if (!candidate) {
-			return res.status;
+			return res.status(StatusCodes.NOT_FOUND).json({
+				status: 0,
+				message: "Candidate not found!"
+			});
 		}
 
 		res.status(StatusCodes.OK).json({
@@ -66,12 +69,12 @@ export const createCandidate = asyncHandler(async (req, res) => {
 			return res.status(StatusCodes.BAD_REQUEST).json({
 				status: 0,
 				message:
-					'Student_ID, Name, Position, and Gender fields are required',
+					'All fields are required',
 			});
 		}
 
 		// Validate User
-		const user = await User.findOne({ studentId });
+		const user = await User.findOne({ studentId }).select("-password");
 
 		if (!user) {
 			return res.status(StatusCodes.NOT_FOUND).json({
@@ -103,9 +106,7 @@ export const createCandidate = asyncHandler(async (req, res) => {
 		if (!PositionsByLevel[level]?.includes(position)) {
 			return res.status(StatusCodes.BAD_REQUEST).json({
 				status: 0,
-				message: `Position must be one of ${PositionsByLevel[
-					level
-				].join(', ')}`,
+				message: `Level not valid for position`,
 			});
 		}
 
@@ -113,9 +114,7 @@ export const createCandidate = asyncHandler(async (req, res) => {
 		if (!Object.values(GenderEnum).includes(gender)) {
 			return res.status(StatusCodes.BAD_REQUEST).json({
 				status: 0,
-				message: `Gender must be one of: ${Object.values(
-					GenderEnum
-				).join(', ')}`,
+				message: `Gender does not match`,
 			});
 		}
 
@@ -129,9 +128,9 @@ export const createCandidate = asyncHandler(async (req, res) => {
 			imageURL,
 			level: user.level,
 			position,
-			user: user._id,
+			user: user,
 		});
-		const candidate = await candidateInstance.save();
+		const candidate = (await candidateInstance.save())
 		res.status(StatusCodes.CREATED).json({
 			status: 1,
 			candidate,
@@ -143,3 +142,28 @@ export const createCandidate = asyncHandler(async (req, res) => {
 		});
 	}
 });
+
+export const deleteCandidate = asyncHandler(async (req, res) => {
+	const { id } = req.params
+
+	try {
+		const candidate = await Candidate.findByIdAndDelete(id)
+
+		if (!candidate) {
+			return res.status(StatusCodes.NOT_FOUND).json({
+				status: 0,
+				message: "Candidate not found!"
+			});
+		}
+
+		res.status(StatusCodes.OK).json({
+			status: 1,
+			message: "Candidate deleted successfully"
+		});
+	} catch (err) {
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+			status: 0,
+			message: err.message,
+		});
+	}
+})

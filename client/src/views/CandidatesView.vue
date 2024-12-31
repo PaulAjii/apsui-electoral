@@ -1,5 +1,6 @@
 <template>
   <SectionLayout customClass="candidates__section" sectionWrapper="candidates__wrapper">
+    <BackButton />
     <header class="candidate__header">
       <h2 class="section__title">Candidates' List</h2>
 
@@ -9,12 +10,30 @@
           <span>New Candidate</span>
         </button>
 
-        <input type="text" name="search" v-model="searchTerm" placeholder="Search Candidate..." />
+        <input type="text" name="search" v-model="searchTerm" placeholder="Search by name, alias, position..." />
       </div>
     </header>
 
-    <div class="candidates__inner-wrapper">
-      <div v-for="candidate in filteredCandidates" :key="candidate._id" class="candidate">
+    <div class="candidates__inner-wrapper"
+        v-if="filteredCandidates.length !== 0"
+    >
+      <div
+        v-for="candidate in filteredCandidates"
+        :key="candidate._id"
+        class="candidate"
+      >
+        <div class="action__btns">
+          <button class="action__btn">
+            <v-icon name="fa-edit" scale="1.2" fill="black" />
+          </button>
+
+          <button 
+            class="action__btn" 
+            @click="handleDeleteCandidate(candidate._id)"
+          >
+            <v-icon name="md-deleteoutline-sharp" scale="1.2" fill="red" />
+          </button>
+        </div>
         <div class="candidate__img">
           <img :src="candidate.imageURL" :alt="candidate.alias" />
         </div>
@@ -31,49 +50,74 @@
       </div>
     </div>
 
+    <div v-else class="not__found">
+      No Candidate found
+    </div>
+
     <AddCandidate v-if="showModal" @close="showModal = false" @submit="handleAddCandidate" />
   </SectionLayout>
 </template>
 
 <script setup>
-import SectionLayout from '../layout/SectionLayout.vue'
-import { useCandidatesStore } from '../store/contestants.js'
-import { storeToRefs } from 'pinia'
-import { onMounted, ref, computed } from 'vue'
-import AddCandidate from '@/components/AddCandidate.vue'
+import SectionLayout from '../layout/SectionLayout.vue';
+import { useCandidatesStore } from '../store/contestants.js';
+import { storeToRefs } from 'pinia';
+import { onMounted, ref, computed } from 'vue';
+import AddCandidate from '@/components/AddCandidate.vue';
+import { useToast } from 'vue-toastification';
+import BackButton from '@/components/BackButton.vue';
 
-const store = useCandidatesStore()
+const store = useCandidatesStore();
 
-const { fetchCandidates, postCandidate } = store
-const { candidates } = storeToRefs(store)
+const { fetchCandidates, postCandidate, deleteCandidate } = store;
+const { candidates } = storeToRefs(store);
+const toast = useToast()
 
-const showModal = ref(false)
+const showModal = ref(false);
 
-const searchTerm = ref('')
+const searchTerm = ref('');
 
 const handleAddCandidate = async (candidateData) => {
-  await postCandidate(candidateData)
-  showModal.value = false
-}
+  try {
+    await postCandidate(candidateData);
+    showModal.value = false;
+    toast.success("Candidate added successfully")
+  } catch (err) {
+    showModal.value = false
+    toast.error(err)
+  }
+};
+
+const handleDeleteCandidate = async (id) => {
+  if (confirm('Are you sure you want to delete this candidate?')) {
+    try {
+      await deleteCandidate(id);
+      toast.success("Candidate deleted successfully")
+    } catch (err) {
+      toast.error(err)
+      // You might want to add error handling/notification here
+    }
+  }
+};
 
 const filteredCandidates = computed(() => {
-  if (!searchTerm.value) return candidates.value
+  if (!searchTerm.value) return candidates.value;
 
   return candidates.value.filter((candidate) => {
-    const search = searchTerm.value.toLowerCase().trim()
-    const name = candidate.name?.toLowerCase() || ''
-    const position = candidate.position?.toLowerCase() || ''
-    const alias = candidate.alias?.toLowerCase() || ''
+    const search = searchTerm.value.toLowerCase().trim();
+    const name = candidate.name?.toLowerCase() || '';
+    const position = candidate.position?.toLowerCase() || '';
+    const alias = candidate.alias?.toLowerCase() || '';
 
-    return name.includes(search) || position.includes(search) || alias.includes(search)
-  })
-})
+    return name.includes(search) || position.includes(search) || alias.includes(search);
+  });
+});
 
 onMounted(async () => {
   if (store.candidates.length === 0) {
-    await fetchCandidates()
+    await fetchCandidates();
   }
-})
+});
 </script>
 
 <style scoped>
@@ -126,8 +170,9 @@ onMounted(async () => {
 .candidates__inner-wrapper {
   height: 100%;
   display: grid;
+  /* display: flex; */
   gap: 2rem;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(4, minmax(300px, 1fr));
   padding-left: 2rem;
   padding-top: 2rem;
 }
@@ -141,11 +186,14 @@ onMounted(async () => {
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
-  transition: transform 0.2s ease;
+  transform-origin: top;
+  will-change: transform, opacity;
+  transition: all 0.5s ease;
 }
 
 .candidate:hover {
   transform: translateY(-2px);
+  background-color: whitesmoke;
 }
 
 .candidate__img {
@@ -173,5 +221,27 @@ onMounted(async () => {
 .candidate__info > .info__field > .label {
   font-weight: 700;
   letter-spacing: 1px;
+}
+
+.candidate > .action__btns {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.candidate:hover > .action__btns {
+  opacity: 1;
+}
+
+.not__found {
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.15rem;
 }
 </style>
