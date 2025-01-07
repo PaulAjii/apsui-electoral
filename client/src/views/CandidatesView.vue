@@ -1,6 +1,14 @@
 <template>
   <SectionLayout customClass="candidates__section" sectionWrapper="candidates__wrapper">
-    <BackButton />
+    <nav class="nav__container">
+      <BackButton />
+
+      <div class="menu">
+        <RouterLink to="/" class="nav__link">Home</RouterLink>
+        <p class="nav__link active">Candidates</p>
+        <RouterLink to="/polls" class="nav__link">Poll</RouterLink>
+      </div>
+    </nav>
     <header class="candidate__header">
       <h2 class="section__title">Candidates' List</h2>
 
@@ -18,6 +26,8 @@
         />
       </div>
     </header>
+
+    <p class="total__candidates">Total Number of Candidates: {{ filteredCandidates.length }}</p>
 
     <div class="candidates__inner-wrapper" v-if="filteredCandidates.length !== 0">
       <div v-for="candidate in filteredCandidates" :key="candidate._id" class="candidate">
@@ -46,7 +56,7 @@
       </div>
     </div>
 
-    <div v-else class="not__found">No Candidate found</div>
+    <div v-else class="not__found">No Candidate added</div>
 
     <AddCandidate v-if="showModal" @close="showModal = false" @submit="handleAddCandidate" />
     <EditCandidate

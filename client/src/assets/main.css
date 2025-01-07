@@ -118,7 +118,6 @@ button {
 .candidates__inner-wrapper {
   height: 100%;
   display: grid;
-  /* display: flex; */
   gap: 2rem;
   grid-template-columns: repeat(4, minmax(300px, 1fr));
   padding-left: 2rem;
@@ -168,4 +167,34 @@ button {
 .candidate__info > .info__field > .label {
   font-weight: 700;
   letter-spacing: 1px;
+}
+
+.total__candidates {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-block: 2rem;
+}
+
+.nav__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.nav__container > .menu {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav__container > .menu > .nav__link {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: rgb(52, 52, 248);
+  cursor: pointer;
+}
+
+.nav__container > .menu > .nav__link.active {
+  color: rgb(72, 73, 72);
+  cursor: default;
 }
