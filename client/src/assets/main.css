@@ -114,3 +114,58 @@ button {
   overflow: hidden;
   height: 100vh;
 }
+
+.candidates__inner-wrapper {
+  height: 100%;
+  display: grid;
+  /* display: flex; */
+  gap: 2rem;
+  grid-template-columns: repeat(4, minmax(300px, 1fr));
+  padding-left: 2rem;
+}
+
+.candidate {
+  max-width: 300px;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+  transform-origin: top;
+  will-change: transform, opacity;
+  transition: all 0.5s ease;
+}
+
+.candidate:hover {
+  transform: translateY(-2px);
+  background-color: whitesmoke;
+}
+
+.candidate__img {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(209, 209, 209);
+  align-self: center;
+}
+
+.candidate__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.candidate__info > .info__field {
+  font-size: 1.1rem;
+}
+
+.candidate__info > .info__field > .label {
+  font-weight: 700;
+  letter-spacing: 1px;
+}

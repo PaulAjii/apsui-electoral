@@ -10,27 +10,23 @@
           <span>New Candidate</span>
         </button>
 
-        <input type="text" name="search" v-model="searchTerm" placeholder="Search by name, alias, position..." />
+        <input
+          type="text"
+          name="search"
+          v-model="searchTerm"
+          placeholder="Search by name, alias, position..."
+        />
       </div>
     </header>
 
-    <div class="candidates__inner-wrapper"
-        v-if="filteredCandidates.length !== 0"
-    >
-      <div
-        v-for="candidate in filteredCandidates"
-        :key="candidate._id"
-        class="candidate"
-      >
+    <div class="candidates__inner-wrapper" v-if="filteredCandidates.length !== 0">
+      <div v-for="candidate in filteredCandidates" :key="candidate._id" class="candidate">
         <div class="action__btns">
-          <button class="action__btn">
+          <button class="action__btn" @click="handleEditClick(candidate)">
             <v-icon name="fa-edit" scale="1.2" fill="black" />
           </button>
 
-          <button 
-            class="action__btn" 
-            @click="handleDeleteCandidate(candidate._id)"
-          >
+          <button class="action__btn" @click="handleDeleteCandidate(candidate._id)">
             <v-icon name="md-deleteoutline-sharp" scale="1.2" fill="red" />
           </button>
         </div>
@@ -50,11 +46,15 @@
       </div>
     </div>
 
-    <div v-else class="not__found">
-      No Candidate found
-    </div>
+    <div v-else class="not__found">No Candidate found</div>
 
     <AddCandidate v-if="showModal" @close="showModal = false" @submit="handleAddCandidate" />
+    <EditCandidate
+      v-if="showEditModal"
+      :candidate="selectedCandidate"
+      @close="showEditModal = false"
+      @submit="handleEditCandidate"
+    />
   </SectionLayout>
 </template>
 
@@ -64,16 +64,19 @@ import { useCandidatesStore } from '../store/contestants.js';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref, computed } from 'vue';
 import AddCandidate from '@/components/AddCandidate.vue';
+import EditCandidate from '@/components/EditCandidate.vue';
 import { useToast } from 'vue-toastification';
 import BackButton from '@/components/BackButton.vue';
 
 const store = useCandidatesStore();
 
-const { fetchCandidates, postCandidate, deleteCandidate } = store;
+const { fetchCandidates, postCandidate, deleteCandidate, updateCandidate } = store;
 const { candidates } = storeToRefs(store);
-const toast = useToast()
+const toast = useToast();
 
 const showModal = ref(false);
+const showEditModal = ref(false);
+const selectedCandidate = ref(null);
 
 const searchTerm = ref('');
 
@@ -81,10 +84,10 @@ const handleAddCandidate = async (candidateData) => {
   try {
     await postCandidate(candidateData);
     showModal.value = false;
-    toast.success("Candidate added successfully")
+    toast.success('Candidate added successfully');
   } catch (err) {
-    showModal.value = false
-    toast.error(err)
+    showModal.value = false;
+    toast.error(err);
   }
 };
 
@@ -92,11 +95,26 @@ const handleDeleteCandidate = async (id) => {
   if (confirm('Are you sure you want to delete this candidate?')) {
     try {
       await deleteCandidate(id);
-      toast.success("Candidate deleted successfully")
+      toast.success('Candidate deleted successfully');
     } catch (err) {
-      toast.error(err)
-      // You might want to add error handling/notification here
+      toast.error(err);
     }
+  }
+};
+
+const handleEditClick = (candidate) => {
+  selectedCandidate.value = candidate;
+  showEditModal.value = true;
+};
+
+const handleEditCandidate = async (updates) => {
+  try {
+    await updateCandidate(selectedCandidate.value._id, updates);
+    showEditModal.value = false;
+    selectedCandidate.value = null;
+    toast.success('Candidate updated successfully');
+  } catch (err) {
+    toast.error(err);
   }
 };
 
@@ -168,59 +186,7 @@ onMounted(async () => {
 }
 
 .candidates__inner-wrapper {
-  height: 100%;
-  display: grid;
-  /* display: flex; */
-  gap: 2rem;
-  grid-template-columns: repeat(4, minmax(300px, 1fr));
-  padding-left: 2rem;
   padding-top: 2rem;
-}
-
-.candidate {
-  max-width: 300px;
-  max-height: 500px;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
-  transform-origin: top;
-  will-change: transform, opacity;
-  transition: all 0.5s ease;
-}
-
-.candidate:hover {
-  transform: translateY(-2px);
-  background-color: whitesmoke;
-}
-
-.candidate__img {
-  width: 200px;
-  height: 200px;
-  overflow: hidden;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgb(209, 209, 209);
-  align-self: center;
-}
-
-.candidate__img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.candidate__info > .info__field {
-  font-size: 1.1rem;
-}
-
-.candidate__info > .info__field > .label {
-  font-weight: 700;
-  letter-spacing: 1px;
 }
 
 .candidate > .action__btns {

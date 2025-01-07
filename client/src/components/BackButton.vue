@@ -11,7 +11,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const goBack = () => {
-  router.goBack();
+  router.go("-1");
 };
 </script>
 

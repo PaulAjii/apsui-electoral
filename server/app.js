@@ -4,7 +4,7 @@ import cors from 'cors';
 
 dotenv.config();
 
-import connectDB from './db/conn.js';
+import connectDB from './config/conn.js';
 import candidateRouter from './router/Candidate.js';
 import userRouter from './router/Users.js';
 import voteRouter from './router/Vote.js';

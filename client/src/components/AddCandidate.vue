@@ -1,5 +1,11 @@
 <template>
   <div class="modal-overlay" @click.self="$emit('close')">
+    <!-- <div class="action__btns">
+      <button class="action__btn edit">
+        <v-icon name="FaEdit" />
+        dlfldfdfl
+      </button> -->
+    <!-- </div> -->
     <div class="modal-content">
       <h2>Add a New Candidate</h2>
       <form @submit.prevent="handleSubmit">
@@ -37,7 +43,6 @@
 
         <div class="form-group">
           <label for="level">Level</label>
-          <!-- ! Make this from the list of possible contesting class -->
           <select name="level" id="level" v-model="formData.level" required>
             <option value="" selected>Select Level</option>
             <option value="100">100</option>

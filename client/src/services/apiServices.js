@@ -1,39 +1,49 @@
-import axios from 'axios'
-import { errorHandler } from '@/utils'
+import axios from 'axios';
+import { errorHandler } from '@/utils';
 
 const apiClient = axios.create({
   baseURL: 'http://localhost:5000/api/v1',
   headers: {
-    'Content-Type': 'application/json',
-  },
-})
+    'Content-Type': 'application/json'
+  }
+});
 
 export const getCandidates = async () => {
   try {
-    const { data } = await apiClient.get('/candidates')
+    const { data } = await apiClient.get('/candidates');
 
-    return data
+    return data;
   } catch (err) {
-      errorHandler(err)
+    errorHandler(err);
   }
-}
+};
 
 export const addCandidate = async (candidateData) => {
   try {
-    const { data } = await apiClient.post('/candidates', candidateData)
+    const { data } = await apiClient.post('/candidates', candidateData);
 
-    return data
+    return data;
   } catch (err) {
-      errorHandler(err)
+    errorHandler(err);
   }
-}
+};
 
 export const removeCandidate = async (id) => {
   try {
-    const { data } = await apiClient.delete(`/candidates/${ id }`)
+    const { data } = await apiClient.delete(`/candidates/${id}`);
 
-    return data
+    return data;
   } catch (err) {
-      errorHandler(err)
+    errorHandler(err);
   }
-}
+};
+
+export const editCandidate = async (id, updates) => {
+  try {
+    const { data } = await apiClient.patch(`/candidates/${id}`, updates);
+
+    return data;
+  } catch (err) {
+    errorHandler(err);
+  }
+};

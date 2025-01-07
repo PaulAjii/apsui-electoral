@@ -5,6 +5,8 @@ import Candidate, {
 import User, { ContestLevelEnum } from '../models/Users.js';
 import { StatusCodes } from 'http-status-codes';
 import { asyncHandler } from '../utils/async_handler.js';
+import cloudinary from '../config/cloudinary.js';
+import { Readable } from 'stream';
 
 export const getAllCandidates = asyncHandler(async (req, res) => {
 	try {
@@ -44,7 +46,7 @@ export const getSingleCandidate = asyncHandler(async (req, res) => {
 		if (!candidate) {
 			return res.status(StatusCodes.NOT_FOUND).json({
 				status: 0,
-				message: "Candidate not found!"
+				message: 'Candidate not found!',
 			});
 		}
 
@@ -68,13 +70,12 @@ export const createCandidate = asyncHandler(async (req, res) => {
 		if (!studentId || !name || !level || !position || !gender) {
 			return res.status(StatusCodes.BAD_REQUEST).json({
 				status: 0,
-				message:
-					'All fields are required',
+				message: 'All fields are required',
 			});
 		}
 
 		// Validate User
-		const user = await User.findOne({ studentId }).select("-password");
+		const user = await User.findOne({ studentId }).select('-password');
 
 		if (!user) {
 			return res.status(StatusCodes.NOT_FOUND).json({
@@ -130,7 +131,7 @@ export const createCandidate = asyncHandler(async (req, res) => {
 			position,
 			user: user,
 		});
-		const candidate = (await candidateInstance.save())
+		const candidate = await candidateInstance.save();
 		res.status(StatusCodes.CREATED).json({
 			status: 1,
 			candidate,
@@ -144,21 +145,21 @@ export const createCandidate = asyncHandler(async (req, res) => {
 });
 
 export const deleteCandidate = asyncHandler(async (req, res) => {
-	const { id } = req.params
+	const { id } = req.params;
 
 	try {
-		const candidate = await Candidate.findByIdAndDelete(id)
+		const candidate = await Candidate.findByIdAndDelete(id);
 
 		if (!candidate) {
 			return res.status(StatusCodes.NOT_FOUND).json({
 				status: 0,
-				message: "Candidate not found!"
+				message: 'Candidate not found!',
 			});
 		}
 
 		res.status(StatusCodes.OK).json({
 			status: 1,
-			message: "Candidate deleted successfully"
+			message: 'Candidate deleted successfully',
 		});
 	} catch (err) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
@@ -166,4 +167,49 @@ export const deleteCandidate = asyncHandler(async (req, res) => {
 			message: err.message,
 		});
 	}
-})
+});
+
+export const updateCandidate = asyncHandler(async (req, res) => {
+	const { id } = req.params;
+	const updates = req.body;
+
+	try {
+		if (req.file) {
+			const stream = Readable.from(req.file.buffer);
+			const result = await new Promise((resolve, reject) => {
+				const uploadStream = cloudinary.uploader.upload_stream(
+					{ folder: 'candidates' },
+					(error, result) => {
+						if (error) reject(error);
+						else resolve(result);
+					}
+				);
+				stream.pipe(uploadStream);
+			});
+			updates.imageURL = result.secure_url;
+		}
+
+		const candidate = await Candidate.findByIdAndUpdate(
+			id,
+			{ $set: updates },
+			{ new: true }
+		);
+
+		if (!candidate) {
+			return res.status(StatusCodes.NOT_FOUND).json({
+				status: 0,
+				message: 'Candidate not found',
+			});
+		}
+
+		res.status(StatusCodes.OK).json({
+			status: 1,
+			candidate,
+		});
+	} catch (err) {
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+			status: 0,
+			message: err.message,
+		});
+	}
+});
