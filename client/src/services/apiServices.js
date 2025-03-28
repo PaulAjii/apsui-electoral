@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { errorHandler } from '@/utils';
+import { getApiUrl } from '@/config';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:5000/api/v1',
+  baseURL: getApiUrl(),
   headers: {
     'Content-Type': 'application/json'
   }

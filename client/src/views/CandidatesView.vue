@@ -56,7 +56,7 @@
       </div>
     </div>
 
-    <div v-else class="not__found">No Candidate added</div>
+    <div v-else class="not__found">No Candidate found</div>
 
     <AddCandidate v-if="showModal" @close="showModal = false" @submit="handleAddCandidate" />
     <EditCandidate
@@ -151,13 +151,14 @@ onMounted(async () => {
 <style scoped>
 .candidate__header {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  flex-direction: column;
   border-bottom: 1px solid rgb(236, 236, 236);
   padding-bottom: 0.5rem;
 }
 
 .section__title {
+  font-size: 1.5rem;
+  margin-bottom: 1.1rem;
   color: transparent;
   background: linear-gradient(90deg, rgb(76 175 80), rgb(255 152 0));
   background-clip: text;
@@ -167,15 +168,16 @@ onMounted(async () => {
 
 .actions {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   align-items: flex-end;
 }
 
 .actions > button {
-  padding: 0.35rem 0.75rem;
+  width: 80%;
+  padding: 0.35rem 0.5rem;
   color: white;
   background: rgb(52, 52, 248);
-  font-size: 1rem;
+  font-size: 14px;
   display: flex;
   align-items: center;
   transition: border-radius 0.5s ease;
@@ -188,7 +190,7 @@ onMounted(async () => {
 }
 
 .actions > input {
-  width: 300px;
+  width: 100%;
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
   border: 1px solid rgb(236, 236, 236);
@@ -196,7 +198,14 @@ onMounted(async () => {
 }
 
 .candidates__inner-wrapper {
-  padding-top: 2rem;
+  padding-block: 1rem;
+  padding-right: 1rem;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+}
+
+.candidate {
+  scroll-snap-align: start;
 }
 
 .candidate > .action__btns {
@@ -219,5 +228,22 @@ onMounted(async () => {
   justify-content: center;
   align-items: center;
   font-size: 1.15rem;
+}
+
+@media screen and (min-width: 800px) {
+  .candidate__header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .section__title {
+    font-size: 2rem;
+    margin-bottom: 0;
+  }
+
+  .actions > button {
+    font-size: 1rem;
+  }
 }
 </style>
