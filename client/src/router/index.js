@@ -11,22 +11,27 @@ const router = createRouter({
       component: HomePage
     },
 
-    {
-      path: '/instructions',
-      name: 'instructions',
-      component: InstructionsPage
-    },
+    // {
+    //   path: '/instructions',
+    //   name: 'instructions',
+    //   component: InstructionsPage
+    // },
 
-    {
-      path: '/polls',
-      name: 'polls',
-      component: () => import('../views/PollPage.vue')
-    },
+    // {
+    //   path: '/polls',
+    //   name: 'polls',
+    //   component: () => import('../views/PollPage.vue')
+    // },
 
+    // {
+    //   path: '/candidates',
+    //   name: 'candidates',
+    //   component: () => import('../views/CandidatesView.vue')
+    // },
     {
-      path: '/candidates',
-      name: 'candidates',
-      component: () => import('../views/CandidatesView.vue')
+      path: '/voters',
+      name: 'Voters',
+      component: () => import('../views/VotersProfile.vue')
     }
   ]
 });

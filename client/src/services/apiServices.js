@@ -47,3 +47,28 @@ export const editCandidate = async (id, updates) => {
     errorHandler(err);
   }
 };
+
+// Voters
+export const getVoter = async (id, store) => {
+  try {
+    const { data } = await apiClient.get(`/users/${id}`);
+
+    store.setVoter(data.user);
+
+    return data;
+  } catch (err) {
+    errorHandler(err);
+  }
+};
+
+export const updateVoters = async (id, updates, store) => {
+  try {
+    const { data } = await apiClient.patch(`/users/${id}`, updates);
+
+    store.setVoter(data.user);
+
+    return data;
+  } catch (err) {
+    errorHandler(err);
+  }
+};

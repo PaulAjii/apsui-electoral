@@ -19,8 +19,12 @@
       </p>
 
       <div class="cta__btns">
-        <CtaButton link="/candidates" text="Candidates List" />
-        <CtaButton link="/polls" text="Go to Poll" btnClass="cta__btn-alt" />
+        <button type="button" class="cta__btn" @click="handleClick">
+          Verify Voter
+          <v-icon name="bi-arrow-up-right" animation="float" />
+        </button>
+        <!-- <CtaButton link="/candidates" text="Candidates List" />
+        <CtaButton link="/polls" text="Go to Poll" btnClass="cta__btn-alt" /> -->
       </div>
     </div>
     <!-- <div class="img__bg"></div> -->
@@ -37,38 +41,76 @@
       background: box.color,
       borderRadius: box.borderRadius,
       top: box.top + 'dvh',
-      left: box.left + 'dvh',
+      left: box.left + 'dvh'
     }"
   ></div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import gsap from 'gsap'
+import { ref, onMounted } from 'vue';
+import gsap from 'gsap';
+import { useToast } from 'vue-toastification';
+import { useRouter } from 'vue-router';
 
-import SectionLayout from '@/layout/SectionLayout.vue'
-import CtaButton from '@/components/CtaButton.vue'
+import SectionLayout from '@/layout/SectionLayout.vue';
+import CtaButton from '@/components/CtaButton.vue';
+import { getVoter } from '@/services/apiServices';
+import { useVotersStore } from '@/store/voters';
 
-const boxesRefs = ref([])
+const voterStore = useVotersStore();
 
-const generateRandom = (min, max) => Math.random() * (max - min) + min
+const boxesRefs = ref([]);
+const loading = ref(false);
+const error = ref(null);
+
+const toast = useToast();
+const router = useRouter();
+
+const generateRandom = (min, max) => Math.random() * (max - min) + min;
 const generateColour = () =>
-  `linear-gradient(135deg, hsla(${generateRandom(0, 360)}, 80%, 60%, 0.5), hsla(${generateRandom(0, 360)}, 80%, 60%, 0.5))`
+  `linear-gradient(135deg, hsla(${generateRandom(0, 360)}, 80%, 60%, 0.5), hsla(${generateRandom(
+    0,
+    360
+  )}, 80%, 60%, 0.5))`;
 
 const boxes = Array.from({ length: 50 }, () => ({
   size: generateRandom(2, 8),
   color: generateColour(),
-  borderRadius: `${generateRandom(10, 80)}% ${generateRandom(10, 80)}% ${generateRandom(10, 80)}% ${generateRandom(10, 80)}% / ${generateRandom(10, 80)}% ${generateRandom(10, 80)}% ${generateRandom(10, 80)}% ${generateRandom(10, 80)}%`,
+  borderRadius: `${generateRandom(10, 80)}% ${generateRandom(10, 80)}% ${generateRandom(
+    10,
+    80
+  )}% ${generateRandom(10, 80)}% / ${generateRandom(10, 80)}% ${generateRandom(
+    10,
+    80
+  )}% ${generateRandom(10, 80)}% ${generateRandom(10, 80)}%`,
   top: generateRandom(-10, 170),
-  left: generateRandom(-10, 170),
-}))
+  left: generateRandom(-10, 170)
+}));
+
+const handleClick = async () => {
+  try {
+    loading.value = true;
+    const response = await getVoter('67e3d1e4217cfcb80ea0fab5', voterStore);
+    if (response.status === 'success') {
+      toast.success('Voter fetched successfully');
+      router.push('/voters');
+    } else {
+      throw new Error('Failed to fetch voter details');
+    }
+  } catch (err) {
+    error.value = err.message;
+    toast.error(error.value);
+  } finally {
+    loading.value = false;
+  }
+};
 
 onMounted(() => {
   boxesRefs.value.forEach((box) => {
-    const duration = generateRandom(2, 5)
-    const xMove = generateRandom(0, 50)
-    const yMove = generateRandom(0, 60)
-    const zMove = generateRandom(-30, 70)
+    const duration = generateRandom(2, 5);
+    const xMove = generateRandom(0, 50);
+    const yMove = generateRandom(0, 60);
+    const zMove = generateRandom(-30, 70);
 
     gsap.to(box, {
       x: xMove + 'rem',
@@ -77,26 +119,26 @@ onMounted(() => {
       duration,
       repeat: -1,
       yoyo: true,
-      ease: 'power2.inOut',
-    })
-  })
-})
+      ease: 'power2.inOut'
+    });
+  });
+});
 </script>
 
 <style scoped>
 .text {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  width: 50%;
+  gap: 1rem;
+  width: 100%;
 }
 
 .text > .hero__text {
-  font-size: 40px;
+  font-size: 25px;
   text-transform: capitalize;
   font-weight: 800;
   letter-spacing: 2px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   line-height: 100%;
 }
 
@@ -107,19 +149,40 @@ onMounted(() => {
 }
 
 .text > .subtitle {
-  font-size: 20px;
-  width: 80%;
+  font-size: 18px;
+  width: 100%;
   line-height: 200%;
   margin-bottom: 1rem;
 }
 
 .text > .cta__btns {
   display: flex;
-  gap: 2.5rem;
+  gap: 2rem;
 }
 
 .box {
   position: absolute;
   z-index: -1;
+}
+
+@media screen and (min-width: 700px) {
+  .text {
+    width: 50%;
+    gap: 2rem;
+  }
+
+  .text > .hero__text {
+    font-size: 40px;
+    margin-bottom: 1.5rem;
+  }
+
+  .text > .subtitle {
+    font-size: 20px;
+    width: 80%;
+  }
+
+  .text > .cta__btns {
+    gap: 2.5rem;
+  }
 }
 </style>

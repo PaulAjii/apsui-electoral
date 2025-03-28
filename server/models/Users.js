@@ -39,20 +39,26 @@ const userSchema = new mongoose.Schema(
 		level: {
 			type: String,
 			enum: Object.values(LevelEnum),
-			// Only required for voters
 			required: function () {
 				return this.role === RoleEnum.VOTER;
 			},
 		},
 		votedPositions: {
 			type: [String],
-			default: [],
+			default: function () {
+				return this.role === RoleEnum.VOTER ? [] : undefined;
+			},
+			get: function (value) {
+				return this.role === RoleEnum.VOTER ? value : undefined;
+			},
 		},
 		hasVoted: {
 			type: Boolean,
-			// Only applicable for voters
 			default: function () {
-				return this.role === RoleEnum.VOTER ? false : null;
+				return this.role === RoleEnum.VOTER ? false : undefined;
+			},
+			get: function (value) {
+				return this.role === RoleEnum.VOTER ? value : undefined;
 			},
 		},
 		isActive: {

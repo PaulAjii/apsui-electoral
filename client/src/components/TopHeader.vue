@@ -9,14 +9,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import gsap from 'gsap'
+import { ref, onMounted } from 'vue';
+import gsap from 'gsap';
 
-const circle1 = ref(null)
-const circle2 = ref(null)
+const circle1 = ref(null);
+const circle2 = ref(null);
 
 onMounted(() => {
-  const timeline = gsap.timeline({ repeat: -1 })
+  const timeline = gsap.timeline({ repeat: -1 });
 
   timeline
     .to(
@@ -24,61 +24,61 @@ onMounted(() => {
       {
         y: -5,
         duration: 2,
-        ease: 'power1.inOut',
+        ease: 'power1.inOut'
       },
-      'sync',
+      'sync'
     )
     .to(
       circle2.value,
       {
         y: 5,
         duration: 2,
-        ease: 'power1.inOut',
+        ease: 'power1.inOut'
       },
-      'sync',
+      'sync'
     )
     .to(
       circle1.value,
       {
         y: 5,
         duration: 2,
-        ease: 'power1.inOut',
+        ease: 'power1.inOut'
       },
-      'sync2',
+      'sync2'
     )
     .to(
       circle2.value,
       {
         y: -5,
         duration: 2,
-        ease: 'power1.inOut',
+        ease: 'power1.inOut'
       },
-      'sync2',
+      'sync2'
     )
     .to([circle1.value, circle2.value], {
       y: 0,
       duration: 2,
-      ease: 'power1.inOut',
+      ease: 'power1.inOut'
     })
     .to(
       circle1.value,
       {
         rotationY: '+=360',
         duration: 2,
-        ease: 'power2.inOut',
+        ease: 'power2.inOut'
       },
-      'flip',
+      'flip'
     )
     .to(
       circle2.value,
       {
         rotationX: '+=360',
         duration: 2,
-        ease: 'power2.inOut',
+        ease: 'power2.inOut'
       },
-      'flip',
-    )
-})
+      'flip'
+    );
+});
 </script>
 
 <style scoped>
@@ -88,6 +88,7 @@ header {
 
 .wrapper {
   display: flex;
+  padding-inline: 1rem;
   gap: 5px;
   align-items: center;
 }

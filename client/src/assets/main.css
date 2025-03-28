@@ -4,6 +4,7 @@
   --header: 5rem;
 
   --primary: rgb(4, 125, 4);
+  --secondary: rgb(255 152 0);
   --neutral: rgba(255, 255, 255, 1);
 
   --bebas: 'Bebas Neue', sans-serif;
@@ -63,17 +64,14 @@ button {
 .wrapper {
   width: 100%;
   height: 100%;
+  padding-inline: 0.5rem;
   max-width: 1440px;
   margin-inline: auto;
 }
 
 .hero {
-  height: calc(100dvh - 4.5rem);
-
-  background-image: url(./images/hero_bg-removebg-preview.png);
-  background-repeat: no-repeat;
-  background-position: right;
-  background-size: 60%;
+  height: calc(100dvh - 25rem);
+  padding-inline: 1rem;
 }
 
 .hero__wrapper {
@@ -88,7 +86,7 @@ button {
   padding: 0.75rem 2.5rem;
   border-radius: 20px;
   color: white;
-  font-size: 18px;
+  font-size: 14px;
   background-color: rgb(76 175 80);
   transition: all 0.5s ease;
   font-weight: 500;
@@ -197,4 +195,24 @@ button {
 .nav__container > .menu > .nav__link.active {
   color: rgb(72, 73, 72);
   cursor: default;
+}
+
+.profile__wrapper {
+  margin-top: 1rem;
+}
+
+@media screen and (min-width: 700px) {
+  .hero {
+    height: calc(100dvh - 4.5rem);
+
+    background-image: url(./images/hero_bg-removebg-preview.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 60%;
+    padding-inline: 0;
+  }
+
+  .cta__btn {
+    font-size: 1.1rem;
+  }
 }
