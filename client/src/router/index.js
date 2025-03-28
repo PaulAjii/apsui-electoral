@@ -23,11 +23,11 @@ const router = createRouter({
     //   component: () => import('../views/PollPage.vue')
     // },
 
-    // {
-    //   path: '/candidates',
-    //   name: 'candidates',
-    //   component: () => import('../views/CandidatesView.vue')
-    // },
+    {
+      path: '/candidates',
+      name: 'candidates',
+      component: () => import('../views/CandidatesView.vue')
+    },
     {
       path: '/voters',
       name: 'Voters',

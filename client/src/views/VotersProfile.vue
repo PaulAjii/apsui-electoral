@@ -30,7 +30,7 @@
           <input type="text" id="set" value="2k24" readonly />
         </div>
 
-        <div class="detail">
+        <div class="detail" v-if="voterStore.voter.hasVoted !== undefined">
           <label for="status">Has Voted</label>
           <input
             type="text"
@@ -41,10 +41,21 @@
         </div>
       </div>
 
-      <button class="update__btn" type="button" v-if="isEditing" @click="handleUpdate">
+      <button class="update__btn" type="button" v-show="isEditing" @click="handleUpdate">
         Update Profile
       </button>
     </form>
+
+    <div class="action__btn" v-if="voterStore.voter.role === 'admin'">
+      <header>
+        <h2>Admin Actions</h2>
+      </header>
+
+      <div class="action">
+        <p class="subtitle">Add or Delete Candidates</p>
+        <CtaButton link="/candidates" text="Candidates" btnClass="cta__btn-alt" />
+      </div>
+    </div>
   </SectionLayout>
 </template>
 
@@ -54,6 +65,7 @@ import { ref, onMounted } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useVotersStore } from '@/store/voters';
 import { updateVoters } from '@/services/apiServices';
+import CtaButton from '@/components/CtaButton.vue';
 
 const voterStore = useVotersStore();
 const toast = useToast();
@@ -103,7 +115,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.profile__header {
+.profile__header,
+.action__btn > header {
   width: 100%;
   max-width: 600px;
   border-bottom: 2px solid var(--secondary);
@@ -113,7 +126,8 @@ onMounted(() => {
   padding-block: 0.25rem;
 }
 
-.profile__header > h2 {
+.profile__header > h2,
+.action__btn > header > h2 {
   font-size: 1.1rem;
   font-weight: 500;
 }
@@ -188,6 +202,39 @@ onMounted(() => {
   border-radius: 1rem 0 1rem 0;
 }
 
+.action__btn {
+  width: 100%;
+  max-width: 600px;
+  padding-top: 1rem;
+  margin-top: 2rem;
+}
+
+.action__btn > header {
+  margin-bottom: 1rem;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.action > .subtitle {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cta__btn-alt {
+  border-color: var(--secondary);
+  color: var(--secondary) !important;
+}
+
+.cta__btn-alt:hover {
+  border-color: var(--secondary);
+  background-color: var(--secondary) !important;
+  color: var(--neutral) !important;
+}
+
 @media screen and (min-width: 700px) {
   .profile__header > h2 {
     font-size: 1.5rem;
@@ -207,6 +254,10 @@ onMounted(() => {
 
   .detail > label {
     min-width: 9rem;
+  }
+
+  .action > .subtitle {
+    font-size: 1rem;
   }
 }
 </style>
