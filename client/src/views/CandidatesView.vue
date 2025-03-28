@@ -6,16 +6,16 @@
       <div class="menu">
         <RouterLink to="/" class="nav__link">Home</RouterLink>
         <p class="nav__link active">Candidates</p>
-        <RouterLink to="/polls" class="nav__link">Poll</RouterLink>
+        <!-- <RouterLink to="/polls" class="nav__link">Poll</RouterLink> -->
       </div>
     </nav>
     <header class="candidate__header">
-      <h2 class="section__title">Candidates' List</h2>
+      <h2 class="section__title">Candidates</h2>
 
       <div class="actions">
         <button type="button" @click="showModal = true">
           <v-icon name="bi-plus" scale="1.5" />
-          <span>New Candidate</span>
+          <span>New</span>
         </button>
 
         <input
