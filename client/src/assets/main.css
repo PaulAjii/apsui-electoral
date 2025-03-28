@@ -33,6 +33,13 @@ body {
   overflow: hidden;
 }
 
+#app {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
 ul {
   list-style: none;
 }
@@ -70,8 +77,9 @@ button {
 }
 
 .hero {
-  height: calc(100dvh - 25rem);
+  height: calc(100dvh - 7rem);
   padding-inline: 1rem;
+  overflow: hidden;
 }
 
 .hero__wrapper {

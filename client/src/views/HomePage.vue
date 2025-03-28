@@ -83,8 +83,8 @@ const boxes = Array.from({ length: 50 }, () => ({
     10,
     80
   )}% ${generateRandom(10, 80)}% ${generateRandom(10, 80)}%`,
-  top: generateRandom(-10, 170),
-  left: generateRandom(-10, 170)
+  top: generateRandom(-10, 100),
+  left: generateRandom(-10, 100)
 }));
 
 const handleClick = async () => {
