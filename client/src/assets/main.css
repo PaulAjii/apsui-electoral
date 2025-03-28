@@ -112,7 +112,7 @@ button {
 }
 
 .candidates__section {
-  padding-block: 2rem;
+  padding-block: 1rem;
 }
 
 .candidates__wrapper {
@@ -127,7 +127,7 @@ button {
   grid-auto-flow: column;
   grid-auto-columns: 300px;
   gap: 2rem;
-  padding-inline: 2rem;
+  padding-inline: 1rem;
   scroll-snap-type: x mandatory;
   overflow-y: hidden;
   scrollbar-width: auto;
@@ -157,7 +157,7 @@ button {
 
 .candidate {
   max-width: 300px;
-  max-height: 500px;
+  max-height: 400px;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -175,8 +175,8 @@ button {
 }
 
 .candidate__img {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   overflow: hidden;
   border-radius: 50%;
   display: grid;
@@ -193,7 +193,7 @@ button {
 }
 
 .candidate__info > .info__field {
-  font-size: 1.1rem;
+  font-size: 0.875rem;
 }
 
 .candidate__info > .info__field > .label {
@@ -202,16 +202,16 @@ button {
 }
 
 .total__candidates {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-block: 2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-block: 1rem;
 }
 
 .nav__container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .nav__container > .menu {
@@ -250,7 +250,34 @@ button {
     font-size: 1.1rem;
   }
 
+  .nav__container {
+    margin-bottom: 1.5rem;
+  }
+
   .nav__container > .menu > .nav__link {
     font-size: 1.15rem;
+  }
+
+  .candidates__inner-wrapper {
+    padding-inline: 2rem;
+  }
+
+  .candidate {
+    height: 500px;
+  }
+
+  .candidate__img {
+    width: 200px;
+    height: 200px;
+  }
+
+  .candidate__info > .info__field {
+    font-size: 1.1rem;
+  }
+
+  .total__candidates {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-block: 2rem;
   }
 }

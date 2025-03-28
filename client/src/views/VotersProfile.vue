@@ -1,5 +1,6 @@
 <template>
   <SectionLayout customClass="wrapper" sectionWrapper="profile__wrapper">
+    <BackButton />
     <header class="profile__header">
       <h2>Voter's Details</h2>
 
@@ -66,6 +67,7 @@ import { useToast } from 'vue-toastification';
 import { useVotersStore } from '@/store/voters';
 import { updateVoters } from '@/services/apiServices';
 import CtaButton from '@/components/CtaButton.vue';
+import BackButton from '@/components/BackButton.vue';
 
 const voterStore = useVotersStore();
 const toast = useToast();
