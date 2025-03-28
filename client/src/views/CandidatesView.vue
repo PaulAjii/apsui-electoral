@@ -157,8 +157,8 @@ onMounted(async () => {
 }
 
 .section__title {
-  font-size: 1.5rem;
-  margin-bottom: 1.1rem;
+  font-size: 1.2rem;
+  margin-bottom: 0.9rem;
   color: transparent;
   background: linear-gradient(90deg, rgb(76 175 80), rgb(255 152 0));
   background-clip: text;
@@ -173,7 +173,7 @@ onMounted(async () => {
 }
 
 .actions > button {
-  width: 80%;
+  width: 70%;
   padding: 0.35rem 0.5rem;
   color: white;
   background: rgb(52, 52, 248);
@@ -198,8 +198,6 @@ onMounted(async () => {
 }
 
 .candidates__inner-wrapper {
-  padding-block: 1rem;
-  padding-right: 1rem;
   overflow-x: scroll;
   scroll-behavior: smooth;
 }
