@@ -157,10 +157,10 @@ button {
 
 .candidate {
   max-width: 300px;
-  max-height: 400px;
+  max-height: 300px;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   border-radius: 12px;
   padding: 0.5rem 1.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
@@ -175,8 +175,8 @@ button {
 }
 
 .candidate__img {
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   overflow: hidden;
   border-radius: 50%;
   display: grid;
