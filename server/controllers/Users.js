@@ -123,15 +123,15 @@ export const updateUser = async (req, res) => {
 
 export const findUserByMatric = async (req, res) => {
 	try {
-		const { studentId } = req.query;
-		if (!studentId) {
+		const { role } = req.query;
+		if (!role) {
 			return res.status(StatusCodes.BAD_REQUEST).json({
 				status: 'error',
 				message: 'Matric number is required',
 			});
 		}
 
-		const user = await User.findOne({ studentId }).select('-password');
+		const user = await User.find({ role }).select('-password');
 
 		if (!user) {
 			return res.status(StatusCodes.NOT_FOUND).json({
