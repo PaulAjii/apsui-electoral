@@ -94,11 +94,11 @@ export const updateUser = async (req, res) => {
 			});
 		}
 
-		const { name, level } = req.body;
+		const { name, level, role } = req.body;
 
 		const user = await User.findByIdAndUpdate(
 			id,
-			{ name, level },
+			{ name, level, role },
 			{ new: true }
 		);
 
@@ -106,6 +106,37 @@ export const updateUser = async (req, res) => {
 			return res.status(StatusCodes.NOT_FOUND).json({
 				status: 'error',
 				message: 'Voter not found',
+			});
+		}
+
+		res.status(StatusCodes.OK).json({
+			status: 'success',
+			user,
+		});
+	} catch (err) {
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+			status: 'error',
+			message: err.message,
+		});
+	}
+};
+
+export const findUserByMatric = async (req, res) => {
+	try {
+		const { studentId } = req.query;
+		if (!studentId) {
+			return res.status(StatusCodes.BAD_REQUEST).json({
+				status: 'error',
+				message: 'Matric number is required',
+			});
+		}
+
+		const user = await User.findOne({ studentId }).select('-password');
+
+		if (!user) {
+			return res.status(StatusCodes.NOT_FOUND).json({
+				status: 'error',
+				message: 'User not found',
 			});
 		}
 
