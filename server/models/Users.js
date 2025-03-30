@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema(
 			required: true,
 			unique: true,
 		},
+		name: {
+			type: String,
+			required: true,
+		},
 		password: {
 			type: String,
 			required: true,
@@ -42,6 +46,10 @@ const userSchema = new mongoose.Schema(
 			required: function () {
 				return this.role === RoleEnum.VOTER;
 			},
+		},
+		set: {
+			type: String,
+			required: true,
 		},
 		votedPositions: {
 			type: [String],
