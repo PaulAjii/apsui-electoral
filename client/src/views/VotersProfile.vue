@@ -28,7 +28,7 @@
 
         <div class="detail">
           <label for="set">Set</label>
-          <input type="text" id="set" value="2k24" readonly />
+          <input type="text" id="set" :value="voterStore.voter.set" readonly />
         </div>
 
         <div class="detail" v-if="voterStore.voter.hasVoted !== undefined">
@@ -83,7 +83,7 @@ const formData = ref({
 
 const handleEdit = () => {
   if (isEditing.value) {
-    formData.value.name = 'John Doe';
+    formData.value.name = voterStore.voter.name;
     formData.value.level = voterStore.voter.level;
   }
   isEditing.value = !isEditing.value;
@@ -110,7 +110,7 @@ const handleUpdate = async () => {
 
 onMounted(() => {
   formData.value = {
-    name: 'John Doe',
+    name: voterStore.voter.name,
     level: voterStore.voter.level
   };
 });

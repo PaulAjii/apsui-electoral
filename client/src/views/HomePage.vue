@@ -90,7 +90,7 @@ const boxes = Array.from({ length: 50 }, () => ({
 const handleClick = async () => {
   try {
     loading.value = true;
-    const response = await getVoter('67e3d1e4217cfcb80ea0fab5', voterStore);
+    const response = await getVoter('67e9c263950f81f5df3028f9', voterStore);
     if (response.status === 'success') {
       toast.success('Voter fetched successfully');
       router.push('/voters');
