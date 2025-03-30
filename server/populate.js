@@ -27,11 +27,10 @@ const populateDB = async () => {
 
 		console.log('DataBase populated successfully!');
 		process.exit(0);
-
-		console.log(data);
 	} catch (err) {
 		console.error(err);
 		process.exit(1);
 	}
 };
+
 populateDB();
