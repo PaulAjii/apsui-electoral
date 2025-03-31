@@ -1,27 +1,20 @@
 <template>
   <SectionLayout customClass="login__section" sectionWrapper="form__wrapper">
     <header>
-      <h2>Login</h2>
-      <p class="subtitle">
-        <em>For first time login, <b>matric number</b> is also password</em>
-      </p>
+      <h2>Reset Password</h2>
+      <p class="subtitle">This is the required procedure for verification</p>
     </header>
 
     <form @submit.prevent="handleSubmit">
       <div class="form__container">
         <div class="form__group">
-          <label for="studentId">Matric No.</label>
-          <input type="text" id="studentId" v-model="formData.studentId" required />
-        </div>
-
-        <div class="form__group">
-          <label for="password">Password</label>
-          <input type="password" id="password" v-model="formData.password" required />
+          <label for="password">New Password</label>
+          <input type="password" id="password" v-model="formData.newPassword" required />
         </div>
       </div>
 
       <button type="submit" :disabled="isLoading" class="submit__btn">
-        {{ isLoading ? 'Logging in...' : 'Login' }}
+        {{ isLoading ? 'Resetting Password...' : 'Reset Password' }}
       </button>
     </form>
   </SectionLayout>
@@ -33,16 +26,13 @@ import { ref } from 'vue';
 import { loginUser } from '../services/apiServices.js';
 import { useToast } from 'vue-toastification';
 import { useRouter } from 'vue-router';
-import {useVoterStore} from "../store/voters.js"
 
 const formData = ref({
-  studentId: '',
-  password: ''
+  newPassword: ''
 });
 
 const toast = useToast();
 const router = useRouter();
-const voterStore = useVoterStore()
 
 const isLoading = ref(false);
 const error = ref(null);
@@ -51,7 +41,7 @@ const handleSubmit = async () => {
   try {
     isLoading.value = true;
 
-    const response = await loginUser(formData.value, voterStore);
+    const response = await loginUser(formData.value);
 
     if (response.status === 'success') {
       localStorage.setItem('token', response.token);
