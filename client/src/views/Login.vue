@@ -33,7 +33,7 @@ import { ref } from 'vue';
 import { loginUser } from '../services/apiServices.js';
 import { useToast } from 'vue-toastification';
 import { useRouter } from 'vue-router';
-import {useVoterStore} from "../store/voters.js"
+import { useVotersStore } from '../store/voters.js';
 
 const formData = ref({
   studentId: '',
@@ -42,7 +42,7 @@ const formData = ref({
 
 const toast = useToast();
 const router = useRouter();
-const voterStore = useVoterStore()
+const voterStore = useVotersStore();
 
 const isLoading = ref(false);
 const error = ref(null);
@@ -53,12 +53,13 @@ const handleSubmit = async () => {
 
     const response = await loginUser(formData.value, voterStore);
 
+    console.log(response);
     if (response.status === 'success') {
       localStorage.setItem('token', response.token);
       toast.success('Login successful');
 
       if (response.user.isFirstTimeLogin) {
-        router.push('/password-reset');
+        router.push('/reset-password');
       } else {
         router.push('/voters');
       }

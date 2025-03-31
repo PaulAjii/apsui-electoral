@@ -2,14 +2,14 @@
   <SectionLayout customClass="login__section" sectionWrapper="form__wrapper">
     <header>
       <h2>Reset Password</h2>
-      <p class="subtitle">This is the required procedure for verification</p>
+      <p class="subtitle">This is a required procedure for verification</p>
     </header>
 
     <form @submit.prevent="handleSubmit">
       <div class="form__container">
         <div class="form__group">
           <label for="password">New Password</label>
-          <input type="password" id="password" v-model="formData.newPassword" required />
+          <input type="password" id="password" v-model="newPassword" required />
         </div>
       </div>
 
@@ -23,16 +23,16 @@
 <script setup>
 import SectionLayout from '../layout/SectionLayout.vue';
 import { ref } from 'vue';
-import { loginUser } from '../services/apiServices.js';
+import { resetPassword } from '../services/apiServices.js';
 import { useToast } from 'vue-toastification';
 import { useRouter } from 'vue-router';
+import { useVotersStore } from '../store/voters.js';
 
-const formData = ref({
-  newPassword: ''
-});
+const newPassword = ref('');
 
 const toast = useToast();
 const router = useRouter();
+const voterStore = useVotersStore();
 
 const isLoading = ref(false);
 const error = ref(null);
@@ -40,22 +40,20 @@ const error = ref(null);
 const handleSubmit = async () => {
   try {
     isLoading.value = true;
+    const voter = voterStore.getVoter;
 
-    const response = await loginUser(formData.value);
+    const response = await resetPassword({
+      studentId: voter.studentId,
+      newPassword: newPassword.value
+    });
 
     if (response.status === 'success') {
-      localStorage.setItem('token', response.token);
-      toast.success('Login successful');
-
-      if (response.user.isFirstTimeLogin) {
-        router.push('/password-reset');
-      } else {
-        router.push('/voters');
-      }
+      toast.success(response.message);
+      router.push('/voters');
     }
   } catch (err) {
     error.value = err.message;
-    toast.error(error.value);
+    toast.error(err.response.data.message || err.message);
   } finally {
     isLoading.value = false;
   }
@@ -109,7 +107,7 @@ header > .subtitle {
 .form__group > label {
   background-color: rgb(17, 17, 17);
   color: var(--neutral);
-  min-width: 7rem;
+  min-width: 9rem;
   padding-inline: 0.5rem;
   display: flex;
   align-items: center;
@@ -171,6 +169,10 @@ header > .subtitle {
 
   .form__group > * {
     font-size: 1.05rem;
+  }
+
+  .form__group > label {
+    min-width: 10rem;
   }
 
   .submit__btn {

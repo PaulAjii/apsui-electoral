@@ -9,6 +9,24 @@ const apiClient = axios.create({
   }
 });
 
+const authenticatedClient = axios.create({
+  baseURL: getApiUrl(),
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+authenticatedClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 export const getCandidates = async () => {
   try {
     const { data } = await apiClient.get('/candidates');
@@ -80,6 +98,16 @@ export const loginUser = async (userData, store) => {
     const { data } = await apiClient.post('/login', userData);
 
     store.setVoter(data.user);
+
+    return data;
+  } catch (err) {
+    errorHandler(err);
+  }
+};
+
+export const resetPassword = async (userData) => {
+  try {
+    const { data } = await authenticatedClient.post('/password-reset', userData);
 
     return data;
   } catch (err) {
