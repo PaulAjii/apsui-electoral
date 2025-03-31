@@ -45,7 +45,6 @@ const router = useRouter();
 const voterStore = useVotersStore();
 
 const isLoading = ref(false);
-const error = ref(null);
 
 const handleSubmit = async () => {
   try {
@@ -65,8 +64,7 @@ const handleSubmit = async () => {
       }
     }
   } catch (err) {
-    error.value = err.message;
-    toast.error(error.value);
+    toast.error(err?.response?.data?.message || 'An error occurred. Please try again.');
   } finally {
     isLoading.value = false;
   }
