@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 
 export const useVotersStore = defineStore('voters', () => {
   const voter = ref(JSON.parse(localStorage.getItem('voterDetails')) || null);
-  const voters = [];
+  const voters = ref([]);
 
   const getVoter = computed(() => voter.value);
 

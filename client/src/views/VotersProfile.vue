@@ -121,7 +121,7 @@ const voterStats = computed(() => {
     500: { total: 0, verified: 0 }
   };
 
-  totalVoters?.value.forEach((voter) => {
+  totalVoters.forEach((voter) => {
     const level = voter.level;
 
     if (stats[level]) {
@@ -164,12 +164,21 @@ const handleUpdate = async () => {
 };
 
 onMounted(async () => {
-  await getAllVoters(voterStore);
+  try {
+    loading.value = true;
+    await getAllVoters(voterStore);
 
-  formData.value = {
-    name: voterStore.voter.name,
-    level: voterStore.voter.level
-  };
+    if (voterStore.voter) {
+      formData.value = {
+        name: voterStore.voter.name,
+        level: voterStore.voter.level
+      };
+    }
+  } catch (error) {
+    toast.error('Failed to load voter data');
+  } finally {
+    loading.value = false;
+  }
 });
 </script>
 
@@ -296,10 +305,12 @@ onMounted(async () => {
 
 .stats__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: 200px;
   gap: 1rem;
   padding: 1rem 0.5rem;
   max-width: 1200px;
+  overflow-x: scroll;
 }
 
 .stat__card {
@@ -371,6 +382,12 @@ onMounted(async () => {
 
   .action > .subtitle {
     font-size: 1rem;
+  }
+
+  .stats__grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-auto-flow: row;
+    overflow: hidden;
   }
 
   .stat__card h3 {
