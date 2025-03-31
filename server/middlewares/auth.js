@@ -7,7 +7,7 @@ export const authenticateUser = async (req, res, next) => {
 	if (!authHeader || !authHeader.startsWith('Bearer ')) {
 		return res.status(StatusCodes.FORBIDDEN).json({
 			status: 'error',
-			message: error.message || 'Auth invalid',
+			message: 'Auth invalid',
 		});
 	}
 
