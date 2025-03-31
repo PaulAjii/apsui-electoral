@@ -57,15 +57,44 @@
         <CtaButton link="/candidates" text="Candidates" btnClass="cta__btn-alt" />
       </div>
     </div>
+
+    <div class="stat">
+      <header>
+        <h2>Voter's Statistics</h2>
+      </header>
+
+      <div class="stats__grid">
+        <div v-for="(stat, level) in voterStats" :key="level" class="stat__card">
+          <h3>{{ level }} level</h3>
+          <div class="stat__info">
+            <p>
+              Total Voters: <span>{{ stat.total }}</span>
+            </p>
+            <p>
+              Verified: <span>{{ stat.verified }}</span>
+            </p>
+            <p>
+              Remaining: <span>{{ stat.total - stat.verified }}</span>
+            </p>
+            <div class="progress__bar">
+              <div
+                class="progress"
+                :style="{ width: `${(stat.verified / stat.total) * 100}%` }"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </SectionLayout>
 </template>
 
 <script setup>
 import SectionLayout from '@/layout/SectionLayout.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useVotersStore } from '@/store/voters';
-import { updateVoters } from '@/services/apiServices';
+import { updateVoters, getAllVoters } from '@/services/apiServices';
 import CtaButton from '@/components/CtaButton.vue';
 import BackButton from '@/components/BackButton.vue';
 
@@ -79,6 +108,32 @@ const loading = ref(false);
 const formData = ref({
   name: '',
   level: ''
+});
+
+const voterStats = computed(() => {
+  const totalVoters = voterStore.voters;
+
+  const stats = {
+    100: { total: 0, verified: 0 },
+    200: { total: 0, verified: 0 },
+    300: { total: 0, verified: 0 },
+    400: { total: 0, verified: 0 },
+    500: { total: 0, verified: 0 }
+  };
+
+  totalVoters?.value.forEach((voter) => {
+    const level = voter.level;
+
+    if (stats[level]) {
+      stats[level].total++;
+
+      if (!voter.isFirstTimeLogin) {
+        stats[level].verified++;
+      }
+    }
+  });
+
+  return stats;
 });
 
 const handleEdit = () => {
@@ -108,7 +163,9 @@ const handleUpdate = async () => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
+  await getAllVoters(voterStore);
+
   formData.value = {
     name: voterStore.voter.name,
     level: voterStore.voter.level
@@ -237,6 +294,60 @@ onMounted(() => {
   color: var(--neutral) !important;
 }
 
+.stats__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  padding: 1rem 0.5rem;
+  max-width: 1200px;
+}
+
+.stat__card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--secondary);
+}
+
+.stat__card h3 {
+  font-size: 0.875rem;
+  color: var(--secondary);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.stat__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat__info p {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+}
+
+.stat__info span {
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.progress__bar {
+  width: 100%;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: var(--secondary);
+  transition: width 0.3s ease;
+}
+
 @media screen and (min-width: 700px) {
   .profile__header > h2 {
     font-size: 1.5rem;
@@ -259,6 +370,14 @@ onMounted(() => {
   }
 
   .action > .subtitle {
+    font-size: 1rem;
+  }
+
+  .stat__card h3 {
+    font-size: 1.4rem;
+  }
+
+  .stat__info p {
     font-size: 1rem;
   }
 }

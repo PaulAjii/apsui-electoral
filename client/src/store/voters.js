@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 
 export const useVotersStore = defineStore('voters', () => {
   const voter = ref(JSON.parse(localStorage.getItem('voterDetails')) || null);
+  const voters = [];
 
   const getVoter = computed(() => voter.value);
 
@@ -11,5 +12,9 @@ export const useVotersStore = defineStore('voters', () => {
     localStorage.setItem('voterDetails', JSON.stringify(voter.value));
   };
 
-  return { voter, getVoter, setVoter };
+  const setAllVoters = (data) => {
+    voters.value = data;
+  };
+
+  return { voter, getVoter, setVoter, setAllVoters, voters };
 });

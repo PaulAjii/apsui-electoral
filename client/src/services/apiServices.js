@@ -80,6 +80,18 @@ export const getVoter = async (id, store) => {
   }
 };
 
+export const getAllVoters = async (store) => {
+  try {
+    const { data } = await authenticatedClient.get('/users');
+
+    store.setAllVoters(data.users);
+  } catch (err) {
+    errorHandler(err);
+  }
+
+  // return data.status;
+};
+
 export const updateVoters = async (id, updates, store) => {
   try {
     const { data } = await apiClient.patch(`/users/${id}`, updates);
