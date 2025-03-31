@@ -95,6 +95,14 @@ userSchema.pre('save', async function (next) {
 	}
 });
 
+userSchema.methods.comparePassword = async function (password) {
+	try {
+		const isMatch = await bcrypt.compare(password, this.password);
+	} catch (err) {
+		throw new Error('Password do not match');
+	}
+};
+
 // Method to check if user can vote
 userSchema.methods.canVote = function () {
 	return this.role === RoleEnum.VOTER && !this.hasVoted;
