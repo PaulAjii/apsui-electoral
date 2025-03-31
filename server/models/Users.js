@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
 export const LevelEnum = {
 	LEVEL_100: '100',
@@ -73,9 +74,26 @@ const userSchema = new mongoose.Schema(
 			type: Boolean,
 			default: true,
 		},
+		isFirstTimeLogin: {
+			type: Boolean,
+			default: true,
+		},
 	},
 	{ timestamps: true }
 );
+
+// Hash password before saving
+userSchema.pre('save', async function (next) {
+	if (!this.isModified('password')) return next();
+
+	try {
+		const salt = await bcrypt.genSalt(10);
+		this.password = await bcrypt.hash(this.password, salt);
+		next();
+	} catch (err) {
+		next(err);
+	}
+});
 
 // Method to check if user can vote
 userSchema.methods.canVote = function () {
