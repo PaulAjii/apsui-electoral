@@ -13,7 +13,7 @@ export const login = async (req, res) => {
 			});
 		}
 
-		const user = await User.findOne({ studentId });
+		const user = await User.findOne({ studentId }).select('-password');
 		if (!user) {
 			return res.status(StatusCodes.NOT_FOUND).json({
 				status: 'error',
@@ -21,10 +21,7 @@ export const login = async (req, res) => {
 			});
 		}
 
-		const isPasswordMatch = await user
-			.comparePassword(password)
-			.select('-password');
-
+		const isPasswordMatch = await user.comparePassword(password);
 		if (!isPasswordMatch) {
 			return res.status(StatusCodes.UNAUTHORIZED).json({
 				status: 'error',
