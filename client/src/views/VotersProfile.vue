@@ -58,9 +58,9 @@
       </div>
     </div>
 
-    <div class="stat">
+    <div class="stat" v-if="!isEditing">
       <header>
-        <h2>Voter's Statistics</h2>
+        <h2>Voters' Statistics</h2>
       </header>
 
       <div class="stats__grid">
