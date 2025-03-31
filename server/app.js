@@ -9,6 +9,8 @@ import candidateRouter from './router/Candidate.js';
 import userRouter from './router/Users.js';
 import voteRouter from './router/Vote.js';
 import authRouter from './router/authRoute.js';
+import resetPasswordRouter from './router/resetPassword.js';
+import { authenticateUser } from './middlewares/auth.js';
 
 const app = express();
 
@@ -25,6 +27,7 @@ app.use('/api/v1', candidateRouter);
 app.use('/api/v1', userRouter);
 app.use('/api/v1', voteRouter);
 app.use('/api/v1', authRouter);
+app.use('/api/v1', authenticateUser, resetPasswordRouter);
 
 const startServer = async () => {
 	try {
