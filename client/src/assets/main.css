@@ -235,6 +235,10 @@ button {
   margin-top: 1rem;
 }
 
+.form__wrapper {
+  padding-inline: 0.75rem;
+}
+
 @media screen and (min-width: 700px) {
   .hero {
     height: calc(100dvh - 4.5rem);

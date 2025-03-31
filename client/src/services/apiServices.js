@@ -73,3 +73,16 @@ export const updateVoters = async (id, updates, store) => {
     errorHandler(err);
   }
 };
+
+// LOGIN USER
+export const loginUser = async (userData, store) => {
+  try {
+    const { data } = await apiClient.post('/login', userData);
+
+    store.setVoter(data.user);
+
+    return data;
+  } catch (err) {
+    errorHandler(err);
+  }
+};

@@ -19,15 +19,22 @@
       </p>
 
       <div class="cta__btns">
-        <button type="button" class="cta__btn" @click="handleClick">
+        <button
+          v-if="!voterStore.voter"
+          type="button"
+          class="cta__btn"
+          @click="router.push('/auth/login')"
+        >
           Verify Voter
           <v-icon name="bi-arrow-up-right" animation="float" />
         </button>
-        <!-- <CtaButton link="/candidates" text="Candidates List" />
-        <CtaButton link="/polls" text="Go to Poll" btnClass="cta__btn-alt" /> -->
+
+        <div v-else class="cta__btns">
+          <CtaButton link="/candidates" text="Candidates List" />
+          <CtaButton link="/polls" text="Go to Poll" btnClass="cta__btn-alt" />
+        </div>
       </div>
     </div>
-    <!-- <div class="img__bg"></div> -->
   </SectionLayout>
 
   <div
@@ -49,21 +56,15 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import gsap from 'gsap';
-import { useToast } from 'vue-toastification';
 import { useRouter } from 'vue-router';
 
 import SectionLayout from '@/layout/SectionLayout.vue';
 import CtaButton from '@/components/CtaButton.vue';
-import { getVoter } from '@/services/apiServices';
 import { useVotersStore } from '@/store/voters';
 
 const voterStore = useVotersStore();
 
 const boxesRefs = ref([]);
-const loading = ref(false);
-const error = ref(null);
-
-const toast = useToast();
 const router = useRouter();
 
 const generateRandom = (min, max) => Math.random() * (max - min) + min;
@@ -87,25 +88,8 @@ const boxes = Array.from({ length: 50 }, () => ({
   left: generateRandom(-10, 100)
 }));
 
-const handleClick = async () => {
-  try {
-    loading.value = true;
-    const response = await getVoter('67e9c263950f81f5df3028f9', voterStore);
-    if (response.status === 'success') {
-      toast.success('Voter fetched successfully');
-      router.push('/voters');
-    } else {
-      throw new Error('Failed to fetch voter details');
-    }
-  } catch (err) {
-    error.value = err.message;
-    toast.error(error.value);
-  } finally {
-    loading.value = false;
-  }
-};
-
 onMounted(() => {
+  voterStore.getVoter;
   boxesRefs.value.forEach((box) => {
     const duration = generateRandom(2, 5);
     const xMove = generateRandom(0, 50);
