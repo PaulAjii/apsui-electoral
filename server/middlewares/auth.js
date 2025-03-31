@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken';
-import { StatusCodes } from '../utils/statusCodes.js';
+import { StatusCodes } from 'http-status-codes';
 
 export const authenticateUser = async (req, res, next) => {
 	const authHeader = req.headers.authorization;
 
 	if (!authHeader || !authHeader.startsWith('Bearer ')) {
-		return res.status(StatusCodes.UNAUTHORIZED).json({
+		return res.status(StatusCodes.FORBIDDEN).json({
 			status: 'error',
-			message: 'Authentication invalid',
+			message: error.message || 'Auth invalid',
 		});
 	}
 
