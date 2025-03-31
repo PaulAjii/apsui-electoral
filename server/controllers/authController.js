@@ -13,7 +13,7 @@ export const login = async (req, res) => {
 			});
 		}
 
-		const user = await User.findOne({ studentId }).select('-password');
+		const user = await User.findOne({ studentId });
 		if (!user) {
 			return res.status(StatusCodes.NOT_FOUND).json({
 				status: 'error',
@@ -40,9 +40,12 @@ export const login = async (req, res) => {
 			{ expiresIn: process.env.JWT_LIFETIME }
 		);
 
+		const { password: userPassword, ...userWithoutPassword } =
+			user.toObject();
+
 		res.status(StatusCodes.OK).json({
 			status: 'success',
-			user,
+			user: userWithoutPassword,
 			token,
 		});
 	} catch (err) {
