@@ -21,7 +21,9 @@ export const login = async (req, res) => {
 			});
 		}
 
-		const isPasswordMatch = await user.comparePassword(password);
+		const isPasswordMatch = await user
+			.comparePassword(password)
+			.select('-password');
 
 		if (!isPasswordMatch) {
 			return res.status(StatusCodes.UNAUTHORIZED).json({
