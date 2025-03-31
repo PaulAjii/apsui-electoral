@@ -8,6 +8,7 @@ import connectDB from './config/conn.js';
 import candidateRouter from './router/Candidate.js';
 import userRouter from './router/Users.js';
 import voteRouter from './router/Vote.js';
+import authRouter from './router/authRoute.js';
 
 const app = express();
 
@@ -23,6 +24,8 @@ app.get('/', (req, res) => {
 app.use('/api/v1', candidateRouter);
 app.use('/api/v1', userRouter);
 app.use('/api/v1', voteRouter);
+app.use('/api/v1/login', authRouter);
+
 const startServer = async () => {
 	try {
 		await connectDB(process.env.DB_URI);
