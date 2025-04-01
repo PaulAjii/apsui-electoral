@@ -45,7 +45,7 @@
         </div>
 
         <div class="candidate__info">
-          <p class="info__field"><span class="label">Name: </span>{{ candidate.user.name }}</p>
+          <p class="info__field"><span class="label">Name: </span>{{ candidate.name }}</p>
           <p class="info__field"><span class="label">Alias: </span>{{ candidate.alias }}</p>
           <p class="info__field"><span class="label">Level: </span>{{ candidate.user.level }}</p>
           <p class="info__field"><span class="label">Position: </span>{{ candidate.position }}</p>
