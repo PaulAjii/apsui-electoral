@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 	res.status(200).send('Hello, World!');
 });
 
-app.use('/api/v1', candidateRouter);
+app.use('/api/v1', authenticateUser, candidateRouter);
 app.use('/api/v1', authRouter);
 app.use('/api/v1', authenticateUser, userRouter);
 app.use('/api/v1', authenticateUser, voteRouter);
