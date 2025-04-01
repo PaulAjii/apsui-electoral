@@ -151,6 +151,7 @@ textarea,
 select {
   background-color: rgb(256, 256, 256);
   outline: none;
+  border: none;
 }
 
 textarea {
