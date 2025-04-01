@@ -102,12 +102,11 @@ const voterStore = useVotersStore();
 const toast = useToast();
 
 const isEditing = ref(false);
-const error = ref(null);
 const loading = ref(false);
 
 const formData = ref({
-  name: '',
-  level: ''
+  name: voterStore.voter.name,
+  level: voterStore.voter.level
 });
 
 const voterStats = computed(() => {
