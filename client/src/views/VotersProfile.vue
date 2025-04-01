@@ -8,8 +8,12 @@
     <header class="profile__header">
       <h2>Voter's Details</h2>
 
-      <button type="button" @click="handleEdit">
-        {{ isEditing ? 'Cancel' : 'Edit Profile' }}
+      <button
+        type="button"
+        v-if="voterStore.voter.role === 'admin'"
+        @click="router.push('/candidates')"
+      >
+        Candidates
       </button>
     </header>
 
@@ -17,7 +21,7 @@
       <div class="profile__details">
         <div class="detail">
           <label for="name">Name</label>
-          <input type="text" id="name" v-model="formData.name" :readonly="!isEditing" />
+          <input type="text" id="name" :value="voterStore.voter.name" readonly />
         </div>
 
         <div class="detail">
@@ -27,7 +31,7 @@
 
         <div class="detail">
           <label for="level">Level</label>
-          <input type="text" id="level" v-model="formData.level" :readonly="!isEditing" />
+          <input type="text" id="level" :value="voterStore.voter.level" readonly />
         </div>
 
         <div class="detail">
@@ -35,7 +39,10 @@
           <input type="text" id="set" :value="voterStore.voter.set" readonly />
         </div>
 
-        <div class="detail" v-if="voterStore.voter.hasVoted !== undefined">
+        <div
+          class="detail"
+          v-if="voterStore.voter.hasVoted !== undefined && voterStore.voter.role !== 'admin'"
+        >
           <label for="status">Has Voted</label>
           <input
             type="text"
@@ -45,24 +52,9 @@
           />
         </div>
       </div>
-
-      <button class="update__btn" type="button" v-show="isEditing" @click="handleUpdate">
-        Update Profile
-      </button>
     </form>
 
-    <div class="action__btn" v-if="voterStore.voter.role === 'admin'">
-      <header>
-        <h2>Admin Actions</h2>
-      </header>
-
-      <div class="action">
-        <p class="subtitle">Add or Delete Candidates</p>
-        <CtaButton link="/candidates" text="Candidates" btnClass="cta__btn-alt" />
-      </div>
-    </div>
-
-    <div class="stat" v-if="!isEditing">
+    <div class="stat">
       <header class="stat__header">
         <h2>Voters' Statistics</h2>
       </header>
@@ -98,21 +90,15 @@ import SectionLayout from '@/layout/SectionLayout.vue';
 import { ref, onMounted, computed } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useVotersStore } from '@/store/voters';
-import { updateVoters, getAllVoters } from '@/services/apiServices';
-import CtaButton from '@/components/CtaButton.vue';
+import { getAllVoters } from '@/services/apiServices';
 import BackButton from '@/components/BackButton.vue';
 import LogoutButton from '@/components/LogoutButton.vue';
+import { useRouter } from 'vue-router';
 
 const voterStore = useVotersStore();
 const toast = useToast();
-
-const isEditing = ref(false);
 const loading = ref(false);
-
-const formData = ref({
-  name: voterStore.voter.name,
-  level: voterStore.voter.level
-});
+const router = useRouter();
 
 const voterStats = computed(() => {
   const totalVoters = voterStore.voters;
@@ -140,43 +126,10 @@ const voterStats = computed(() => {
   return stats;
 });
 
-const handleEdit = () => {
-  if (isEditing.value) {
-    formData.value.name = voterStore.voter.name;
-    formData.value.level = voterStore.voter.level;
-  }
-  isEditing.value = !isEditing.value;
-};
-
-const handleUpdate = async () => {
-  try {
-    loading.value = true;
-    const response = await updateVoters(voterStore.voter._id, formData.value, voterStore);
-
-    if (response.status === 'success') {
-      toast.success('Profile Updated successfully');
-    } else {
-      throw new Error('Failed to update profile');
-    }
-  } catch (err) {
-    toast.error(err.message);
-  } finally {
-    isEditing.value = false;
-    loading.value = false;
-  }
-};
-
 onMounted(async () => {
   try {
     loading.value = true;
     await getAllVoters(voterStore);
-
-    if (voterStore.voter) {
-      formData.value = {
-        name: voterStore.voter.name,
-        level: voterStore.voter.level
-      };
-    }
   } catch (error) {
     toast.error('Failed to load voter data');
   } finally {
