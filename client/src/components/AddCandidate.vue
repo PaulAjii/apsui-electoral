@@ -199,9 +199,8 @@ button {
 }
 
 .form__group > * {
-  font-size: 0.95rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 1px;
 }
 
 .form__group > label {
@@ -250,6 +249,10 @@ button {
 
   .modal-content {
     padding: 2rem;
+  }
+
+  .form__group > * {
+    font-size: 0.9rem;
   }
 }
 </style>
