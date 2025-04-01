@@ -216,8 +216,11 @@ button {
   justify-content: flex-start;
 }
 
-.form__group > input {
+.form__group > input,
+.form__group > select,
+.form__group > textarea {
   padding-block: 0.35rem;
+  padding-left: 0.5rem;
   width: 100%;
 }
 
