@@ -140,20 +140,17 @@ h2 {
 .form-group {
   margin-bottom: 0.5rem;
 }
-/*
+
+select {
+  padding-inline: 0;
+}
+
 input,
 textarea,
 select {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
   background-color: rgb(256, 256, 256);
-  color: rgb(58, 58, 58);
   outline: none;
-  font-weight: 500;
-  font-size: 1rem;
-}*/
+}
 
 textarea {
   resize: none;
