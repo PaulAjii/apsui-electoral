@@ -16,7 +16,7 @@
         </div>
 
         <div class="form__group">
-          <label for="studentID">Student ID</label>
+          <label for="studentID">Matric No.</label>
           <input
             type="text"
             id="studentID"
@@ -63,7 +63,7 @@
         </div>
 
         <div class="form__group">
-          <label for="catchPhrase">Catch Phrase</label>
+          <label for="catchPhrase">Catchphrase</label>
           <textarea
             id="catchPhrase"
             v-model="formData.catchPhrase"
@@ -206,7 +206,7 @@ button {
 .form__group > label {
   background-color: rgb(17, 17, 17);
   color: var(--neutral);
-  min-width: 9rem;
+  min-width: 7rem;
   padding-inline: 0.5rem;
   display: flex;
   align-items: center;
@@ -241,4 +241,6 @@ button {
   cursor: not-allowed;
   background-color: rgb(128, 128, 128);
 }
+
+
 </style>
