@@ -206,7 +206,7 @@ button {
 .form__group > label {
   background-color: rgb(17, 17, 17);
   color: var(--neutral);
-  min-width: 7rem;
+  min-width: 6rem;
   padding-inline: 0.5rem;
   display: flex;
   align-items: center;
@@ -253,6 +253,10 @@ button {
 
   .form__group > * {
     font-size: 0.9rem;
+  }
+  
+  .form__group > label {
+    min-width: 7rem;
   }
 }
 </style>
