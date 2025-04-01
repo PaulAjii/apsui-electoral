@@ -27,9 +27,10 @@ authenticatedClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export const getCandidates = async () => {
+export const getCandidates = async (store) => {
   try {
-    const { data } = await apiClient.get('/candidates');
+    const { data } = await authenticatedClient.get('/candidates');
+    store.setCandidates(data.candidates);
 
     return data;
   } catch (err) {
@@ -37,9 +38,11 @@ export const getCandidates = async () => {
   }
 };
 
-export const addCandidate = async (candidateData) => {
+export const createCandidate = async (candidateData, store) => {
   try {
-    const { data } = await apiClient.post('/candidates', candidateData);
+    const { data } = await authenticatedClient.post('/candidates', candidateData);
+
+    store.addCandidate(data.candidate);
 
     return data;
   } catch (err) {

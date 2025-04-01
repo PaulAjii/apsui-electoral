@@ -45,7 +45,7 @@
         </div>
 
         <div class="candidate__info">
-          <p class="info__field"><span class="label">Name: </span>{{ candidate.name }}</p>
+          <p class="info__field"><span class="label">Name: </span>{{ candidate.user.name }}</p>
           <p class="info__field"><span class="label">Alias: </span>{{ candidate.alias }}</p>
           <p class="info__field"><span class="label">Level: </span>{{ candidate.user.level }}</p>
           <p class="info__field"><span class="label">Position: </span>{{ candidate.position }}</p>
@@ -71,17 +71,15 @@
 <script setup>
 import SectionLayout from '../layout/SectionLayout.vue';
 import { useCandidatesStore } from '../store/contestants.js';
-import { storeToRefs } from 'pinia';
 import { onMounted, ref, computed } from 'vue';
 import AddCandidate from '@/components/AddCandidate.vue';
 import EditCandidate from '@/components/EditCandidate.vue';
 import { useToast } from 'vue-toastification';
 import BackButton from '@/components/BackButton.vue';
+import { getCandidates } from '@/services/apiServices';
 
 const store = useCandidatesStore();
 
-const { fetchCandidates, postCandidate, deleteCandidate, updateCandidate } = store;
-const { candidates } = storeToRefs(store);
 const toast = useToast();
 
 const showModal = ref(false);
@@ -129,9 +127,9 @@ const handleEditCandidate = async (updates) => {
 };
 
 const filteredCandidates = computed(() => {
-  if (!searchTerm.value) return candidates.value;
+  if (!searchTerm.value) return store.candidates;
 
-  return candidates.value.filter((candidate) => {
+  return store.candidates.filter((candidate) => {
     const search = searchTerm.value.toLowerCase().trim();
     const name = candidate.name?.toLowerCase() || '';
     const position = candidate.position?.toLowerCase() || '';
@@ -142,8 +140,11 @@ const filteredCandidates = computed(() => {
 });
 
 onMounted(async () => {
-  if (store.candidates.length === 0) {
-    await fetchCandidates();
+  try {
+    await getCandidates(store);
+    toast.success('Candidates fetched successfully');
+  } catch (err) {
+    toast.error(err.message);
   }
 });
 </script>

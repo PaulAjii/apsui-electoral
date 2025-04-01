@@ -1,24 +1,22 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import {
-  getCandidates,
-  addCandidate,
-  removeCandidate,
-  editCandidate
-} from '@/services/apiServices';
+// import {
+//   getCandidates,
+//   addCandidate,
+//   removeCandidate,
+//   editCandidate
+// } from '@/services/apiServices';
 
-export const useCandidatesStore = defineStore('candidateList', () => {
+export const useCandidatesStore = defineStore('candidates', () => {
   // const candidates = ref(JSON.parse(localStorage.getItem('candidates')) || [])
   const candidates = ref([]);
 
-  const fetchCandidates = async () => {
-    if (candidates.value.length === 0) {
-      const data = await getCandidates();
+  const setCandidates = (data) => {
+    candidates.value = data;
+  };
 
-      // localStorage.setItem('candidates', JSON.stringify(data.candidates))
-
-      candidates.value = data.candidates;
-    }
+  const addCandidate = (data) => {
+    candidates.value.push(data);
   };
 
   const postCandidate = async (candidateData) => {
@@ -48,5 +46,12 @@ export const useCandidatesStore = defineStore('candidateList', () => {
     }
   };
 
-  return { fetchCandidates, candidates, postCandidate, deleteCandidate, updateCandidate };
+  return {
+    setCandidates,
+    addCandidate,
+    candidates,
+    postCandidate,
+    deleteCandidate,
+    updateCandidate
+  };
 });
