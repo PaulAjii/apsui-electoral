@@ -31,7 +31,7 @@
 
         <div v-else class="cta__btns">
           <!-- <CtaButton link="/candidates" text="Candidates List" /> -->
-          <CtaButton link="/users/profile" text="Profile" btnClass="cta__btn-alt" />
+          <CtaButton link="/voters/profile" text="Profile" btnClass="cta__btn-alt" />
         </div>
       </div>
     </div>
