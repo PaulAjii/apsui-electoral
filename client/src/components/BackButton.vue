@@ -1,5 +1,5 @@
 <template>
-  <button @click="goBack">
+  <button @click="handleNavigate">
     <v-icon name="md-arrowback-round" scale="1.2" animation="wrench" />
     <span>Back</span>
   </button>
@@ -7,11 +7,24 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+import { useVotersStore } from '@/store/voters';
 
 const router = useRouter();
+const voterStore = useVotersStore();
 
-const goBack = () => {
-  router.go('-1');
+const handleNavigate = () => {
+  const currentRoute = router.currentRoute.value.path;
+  const protectedRoutes = ['/login', '/reset-password'];
+
+  if (currentRoute === '/voters/profile' && voterStore.voter) {
+    if (voterStore.voter && protectedRoutes.includes(router.options.history.state.back)) {
+      router.push('/');
+    } else {
+      router.go('-1');
+    }
+  } else {
+    router.go('-1');
+  }
 };
 </script>
 

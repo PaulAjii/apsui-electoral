@@ -52,7 +52,6 @@ const handleSubmit = async () => {
 
     const response = await loginUser(formData.value, voterStore);
 
-    console.log(response);
     if (response.status === 'success') {
       localStorage.setItem('token', response.token);
       toast.success('Login successful');
@@ -60,7 +59,7 @@ const handleSubmit = async () => {
       if (response.user.isFirstTimeLogin) {
         router.push('/reset-password');
       } else {
-        router.push('/voters');
+        router.push('/voters/profile');
       }
     }
   } catch (err) {

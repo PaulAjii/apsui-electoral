@@ -29,7 +29,7 @@ const router = createRouter({
       component: () => import('../views/CandidatesView.vue')
     },
     {
-      path: '/voters',
+      path: '/voters/profile',
       name: 'Voters',
       component: () => import('../views/VotersProfile.vue')
     },

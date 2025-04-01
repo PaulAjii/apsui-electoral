@@ -49,7 +49,7 @@ const handleSubmit = async () => {
 
     if (response.status === 'success') {
       toast.success(response.message);
-      router.push('/voters');
+      router.push('/voters/profile');
     }
   } catch (err) {
     error.value = err.message;

@@ -70,7 +70,7 @@ export const editCandidate = async (id, updates) => {
 // Voters
 export const getVoter = async (id, store) => {
   try {
-    const { data } = await apiClient.get(`/users/${id}`);
+    const { data } = await authenticatedClient.get(`/users/${id}`);
 
     store.setVoter(data.user);
 
@@ -94,7 +94,7 @@ export const getAllVoters = async (store) => {
 
 export const updateVoters = async (id, updates, store) => {
   try {
-    const { data } = await apiClient.patch(`/users/${id}`, updates);
+    const { data } = await authenticatedClient.patch(`/users/${id}`, updates);
 
     store.setVoter(data.user);
 

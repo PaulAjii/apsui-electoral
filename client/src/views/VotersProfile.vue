@@ -59,7 +59,7 @@
     </div>
 
     <div class="stat" v-if="!isEditing">
-      <header>
+      <header class="stat__header">
         <h2>Voters' Statistics</h2>
       </header>
 
@@ -155,8 +155,7 @@ const handleUpdate = async () => {
       throw new Error('Failed to update profile');
     }
   } catch (err) {
-    error.value = err.message;
-    toast.error(error.value);
+    toast.error(err.message);
   } finally {
     isEditing.value = false;
     loading.value = false;
@@ -195,7 +194,8 @@ onMounted(async () => {
 }
 
 .profile__header > h2,
-.action__btn > header > h2 {
+.action__btn > header > h2,
+.stat__header > h2 {
   font-size: 1.1rem;
   font-weight: 500;
 }
@@ -360,7 +360,8 @@ onMounted(async () => {
 }
 
 @media screen and (min-width: 700px) {
-  .profile__header > h2 {
+  .profile__header > h2,
+  .stat__header > h2 {
     font-size: 1.5rem;
   }
 
