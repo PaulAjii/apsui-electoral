@@ -112,6 +112,7 @@ const handleSubmit = () => {
 
 <style scoped>
 h2 {
+  font-size: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -131,7 +132,7 @@ h2 {
 .modal-content {
   background: rgba(255, 255, 255, 0.9);
   border-radius: 16px;
-  padding: 2rem;
+  padding: 1rem;
   width: 90%;
   max-width: 500px;
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -242,5 +243,13 @@ button {
   background-color: rgb(128, 128, 128);
 }
 
+@media screen and (min-width: 700px) {
+  h2 {
+    font-size: 1.5rem;
+  }
 
+  .modal-content {
+    padding: 2rem;
+  }
+}
 </style>
