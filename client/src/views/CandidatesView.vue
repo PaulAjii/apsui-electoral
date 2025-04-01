@@ -174,7 +174,7 @@ onMounted(async () => {
 }
 
 .actions > button {
-  width: 70%;
+  width: 40%;
   padding: 0.35rem 0.5rem;
   color: white;
   background: rgb(52, 52, 248);
