@@ -3,23 +3,23 @@
     <div class="modal-content">
       <h2>Edit Candidate</h2>
       <form @submit.prevent="handleSubmit">
-        <div class="form-group">
+        <div class="form__group">
           <label for="name">Name</label>
           <input type="text" id="name" v-model="formData.name" required />
         </div>
 
-        <div class="form-group">
+        <div class="form__group">
           <label for="alias">Alias</label>
           <input type="text" id="alias" v-model="formData.alias" required />
         </div>
 
-        <div class="form-group">
+        <div class="form__group">
           <label for="catchPhrase">Catch Phrase</label>
           <textarea id="catchPhrase" v-model="formData.catchPhrase" required></textarea>
         </div>
 
-        <div class="form-group">
-          <label for="image">Candidate Image</label>
+        <div class="form__group">
+          <label for="image">Image</label>
           <div class="image__upload">
             <div class="image__preview" v-if="imagePreview || formData.imageURL">
               <img :src="imagePreview || formData.imageURL" alt="Preview" />
@@ -58,16 +58,10 @@ const emit = defineEmits(['close', 'submit']);
 const formData = ref({ ...props.candidate });
 const imagePreview = ref(null);
 const imageError = ref('');
-// const isLoading = ref(false)
 
 const handleImageChange = (e) => {
   const file = e.target.files[0];
   if (!file) return;
-
-  //   if (!file.type.includes('image/')) {
-  //     imageError.value = 'Please select an image file';
-  //     return;
-  //   }
 
   if (file.size > 2 * 1024 * 1024) {
     imageError.value = 'Image must be less than 2MB';
@@ -90,6 +84,7 @@ const handleSubmit = () => {
 
 <style scoped>
 h2 {
+  font-size: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -109,33 +104,26 @@ h2 {
 .modal-content {
   background: rgba(255, 255, 255, 0.9);
   border-radius: 16px;
-  padding: 2rem;
+  padding: 1rem;
   width: 90%;
   max-width: 500px;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.form-group {
+.form__group {
   margin-bottom: 0.5rem;
 }
 
-label {
-  display: block;
-  font-weight: bold;
+select {
+  padding-inline: 0;
 }
 
 input,
 textarea,
 select {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
   background-color: rgb(256, 256, 256);
-  color: rgb(58, 58, 58);
   outline: none;
-  font-weight: 500;
-  font-size: 1rem;
+  border: none;
 }
 
 textarea {
@@ -164,6 +152,67 @@ button {
 .cancel__btn {
   background: #f44336;
   color: white;
+}
+
+.form__container {
+  width: 100%;
+  max-width: 600px;
+  padding: 1.5rem 0.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.form__group {
+  display: flex;
+  border: 2px solid rgb(17, 17, 17);
+  border-radius: 0.25rem;
+  font-size: 1rem;
+}
+
+.form__group > * {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.form__group > label {
+  background-color: rgb(17, 17, 17);
+  color: var(--neutral);
+  min-width: 6rem;
+  padding-inline: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.form__group > input,
+.form__group > select,
+.form__group > textarea {
+  padding-block: 0.35rem;
+  padding-left: 0.5rem;
+  width: 100%;
+}
+
+.submit__btn {
+  background-color: rgb(37, 37, 238);
+  color: var(--neutral);
+  padding-block: 0.5rem;
+  width: 100%;
+  max-width: 600px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.5s ease;
+}
+
+.submit__btn:hover {
+  border-radius: 1rem 0 1rem 0;
+}
+
+.submit__btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background-color: rgb(128, 128, 128);
 }
 
 .image__upload {
@@ -198,5 +247,25 @@ input[type='file'] {
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
+  width: 100%;
+  font: 'Poppins', sans-serif;
+}
+
+@media screen and (min-width: 700px) {
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .modal-content {
+    padding: 2rem;
+  }
+
+  .form__group > * {
+    font-size: 0.9rem;
+  }
+
+  .form__group > label {
+    min-width: 7rem;
+  }
 }
 </style>

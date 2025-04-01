@@ -62,9 +62,11 @@ export const deleteCandidate = async (id, store) => {
   }
 };
 
-export const editCandidate = async (id, updates) => {
+export const editCandidate = async (id, updates, store) => {
   try {
-    const { data } = await apiClient.patch(`/candidates/${id}`, updates);
+    const { data } = await authenticatedClient.patch(`/candidates/${id}`, updates);
+
+    store.updateCandidate(id, updates);
 
     return data;
   } catch (err) {

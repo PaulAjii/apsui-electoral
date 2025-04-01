@@ -1,11 +1,5 @@
 <template>
   <div class="modal-overlay" @click.self="$emit('close')">
-    <!-- <div class="action__btns">
-      <button class="action__btn edit">
-        <v-icon name="FaEdit" />
-        dlfldfdfl
-      </button> -->
-    <!-- </div> -->
     <div class="modal-content">
       <h2>Add a New Candidate</h2>
       <form @submit.prevent="handleSubmit">

@@ -81,7 +81,12 @@ import AddCandidate from '@/components/AddCandidate.vue';
 import EditCandidate from '@/components/EditCandidate.vue';
 import { useToast } from 'vue-toastification';
 import BackButton from '@/components/BackButton.vue';
-import { getCandidates, createCandidate, deleteCandidate } from '@/services/apiServices';
+import {
+  getCandidates,
+  createCandidate,
+  deleteCandidate,
+  editCandidate
+} from '@/services/apiServices';
 
 const store = useCandidatesStore();
 
@@ -135,12 +140,18 @@ const handleEditClick = (candidate) => {
 
 const handleEditCandidate = async (updates) => {
   try {
-    await updateCandidate(selectedCandidate.value._id, updates);
-    showEditModal.value = false;
-    selectedCandidate.value = null;
-    toast.success('Candidate updated successfully');
+    loading.value = true;
+    const response = await editCandidate(selectedCandidate.value._id, updates, store);
+
+    if (response.status === 'success') {
+      showEditModal.value = false;
+      selectedCandidate.value = null;
+      toast.success('Candidate updated successfully');
+    }
   } catch (err) {
     toast.error(err);
+  } finally {
+    loading.value = true;
   }
 };
 
