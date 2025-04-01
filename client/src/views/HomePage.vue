@@ -14,8 +14,12 @@
       </h1>
 
       <p class="subtitle">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laudantium ratione itaque, vel
-        eius temporibus suscipit similique distinctio maxime cupiditate voluptatem.
+        <b>Shape the Future of APS—Your Vote Matters!</b> <br /><br />
+
+Your voice drives our community forward. By voting, you influence decisions on events, advocacy, and resources that shape the association.<br />Every ballot fuels progress.<br />
+Don’t let others decide for you. <br />
+
+Together, we rise stronger.
       </p>
 
       <div class="cta__btns">
