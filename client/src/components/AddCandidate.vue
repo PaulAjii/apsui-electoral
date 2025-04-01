@@ -140,12 +140,7 @@ h2 {
 .form-group {
   margin-bottom: 0.5rem;
 }
-
-label {
-  display: block;
-  font-weight: bold;
-}
-
+/*
 input,
 textarea,
 select {
@@ -158,7 +153,7 @@ select {
   outline: none;
   font-weight: 500;
   font-size: 1rem;
-}
+}*/
 
 textarea {
   resize: none;
@@ -200,7 +195,6 @@ button {
 
 .form__group {
   display: flex;
-  gap: 0.5rem;
   border: 2px solid rgb(17, 17, 17);
   border-radius: 0.25rem;
   font-size: 1rem;
@@ -215,7 +209,7 @@ button {
 .form__group > label {
   background-color: rgb(17, 17, 17);
   color: var(--neutral);
-  min-width: 7rem;
+  min-width: 9rem;
   padding-inline: 0.5rem;
   display: flex;
   align-items: center;
