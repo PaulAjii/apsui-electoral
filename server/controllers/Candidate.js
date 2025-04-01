@@ -64,10 +64,10 @@ export const getSingleCandidate = asyncHandler(async (req, res) => {
 
 export const createCandidate = asyncHandler(async (req, res) => {
 	try {
-		const { studentId, name, level, position, gender } = req.body;
+		const { studentId, level, position, gender, name } = req.body;
 		let imageURL = req.body.imageURL;
 
-		if (!studentId || !name || !level || !position || !gender) {
+		if (!studentId || !level || !position || !gender || !name) {
 			return res.status(StatusCodes.BAD_REQUEST).json({
 				status: 0,
 				message: 'All fields are required',
@@ -127,10 +127,9 @@ export const createCandidate = asyncHandler(async (req, res) => {
 		const candidateInstance = new Candidate({
 			...req.body,
 			imageURL,
-			level: user.level,
 			position,
 			user: user,
-		});
+		}).select('-name');
 		const candidate = await candidateInstance.save();
 		res.status(StatusCodes.CREATED).json({
 			status: 1,

@@ -7,16 +7,37 @@ export const GenderEnum = {
 };
 
 export const PositionsByLevel = {
-	[ContestLevelEnum['100']]: ['Special Duties Officer'],
+	[ContestLevelEnum['100']]: ['Special Duties Officer', 'Senate'],
 	[ContestLevelEnum['200']]: [
-		'Treasurer',
+		'Sports Secretary',
+		'Social Director',
+		'Special Duties Officer',
+		'Public Relations Officer',
+		'Assistant General Secretary',
+		'Senate',
+	],
+	[ContestLevelEnum['300']]: [
+		'Vice President',
+		'General Secretary',
+		'Assistant General Secretary',
 		'Financial Secretary',
+		'Treasurer',
+		'Public Relations Officer',
 		'Social Director',
 		'Sports Secretary',
-		'Assistant General Secretary',
+		'Senate',
 	],
-	[ContestLevelEnum['300']]: ['Vice President', 'General Secretary'],
-	[ContestLevelEnum['400']]: ['President'],
+	[ContestLevelEnum['400']]: [
+		'President',
+		'Vice President',
+		'General Secretary',
+		'Assistant General Secretary',
+		'Financial Secretary',
+		'Treasurer',
+		'Public Relations Officer',
+		'Sports Secretary',
+		'Senate',
+	],
 };
 
 const candidateSchema = new mongoose.Schema(
