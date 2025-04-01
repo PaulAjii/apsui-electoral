@@ -14,10 +14,7 @@ const voterStore = useVotersStore();
 
 const handleNavigate = () => {
   const currentRoute = router.currentRoute.value.path;
-  const protectedRoutes = ['/login', '/reset-password'];
-
-console.log(currentRoute)
-console.log(router.options.history.state.back)
+  const protectedRoutes = ['auth/login', '/reset-password'];
 
   if (currentRoute === '/voters/profile' && voterStore.voter) {
     if (voterStore.voter && protectedRoutes.includes(router.options.history.state.back)) {
