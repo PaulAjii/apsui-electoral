@@ -13,8 +13,8 @@ import {
 
 const router = Router();
 
-router.get('/candidates', getSingleCandidate);
-router.get('/candidates/:id', authenticateUser, getAllCandidates);
+router.get('/candidates', getAllCandidates);
+router.get('/candidates/:id', authenticateUser, getSingleCandidate);
 router.post('/candidates', authenticateUser, isAdmin, createCandidate);
 router.delete('/candidates/:id', authenticateUser, isAdmin, deleteCandidate);
 router.patch(
