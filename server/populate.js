@@ -36,7 +36,7 @@ const populateDB = async () => {
 
 		await Users.insertMany(transformedUserData);
 
-		console.log('DataBase populated successfully!');
+		console.log('Database populated successfully!');
 		process.exit(0);
 	} catch (err) {
 		console.error(err);
