@@ -129,7 +129,7 @@ export const createCandidate = asyncHandler(async (req, res) => {
 			imageURL,
 			position,
 			user: user,
-		}).select('-name');
+		});
 		const candidate = await candidateInstance.save();
 		res.status(StatusCodes.CREATED).json({
 			status: 'success',

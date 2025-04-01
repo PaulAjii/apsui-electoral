@@ -9,71 +9,73 @@
     <div class="modal-content">
       <h2>Add a New Candidate</h2>
       <form @submit.prevent="handleSubmit">
-<div class="form__container">
-        <div class="form__group">
-          <label for="name">Name</label>
-          <input type="text" id="name" v-model="formData.name" placeholder="John Doe" required />
-        </div>
+        <div class="form__container">
+          <div class="form__group">
+            <label for="name">Name</label>
+            <input type="text" id="name" v-model="formData.name" placeholder="John Doe" required />
+          </div>
 
-        <div class="form__group">
-          <label for="studentID">Matric No.</label>
-          <input
-            type="text"
-            id="studentID"
-            v-model="formData.studentId"
-            placeholder="234612"
-            required
-          />
-        </div>
+          <div class="form__group">
+            <label for="studentID">Matric No.</label>
+            <input
+              type="text"
+              id="studentID"
+              v-model="formData.studentId"
+              placeholder="234612"
+              required
+            />
+          </div>
 
-        <div class="form__group">
-          <label for="alias">Alias</label>
-          <input type="text" id="alias" v-model="formData.alias" placeholder="johnny" />
-        </div>
+          <div class="form__group">
+            <label for="alias">Alias</label>
+            <input type="text" id="alias" v-model="formData.alias" placeholder="johnny" />
+          </div>
 
-        <div class="form__group">
-          <label for="position">Position</label>
-          <input
-            type="text"
-            id="position"
-            v-model="formData.position"
-            placeholder="Social Director"
-            required
-          />
-        </div>
+          <div class="form__group">
+            <label for="position">Position</label>
+            <input
+              type="text"
+              id="position"
+              v-model="formData.position"
+              placeholder="Social Director"
+              required
+            />
+          </div>
 
-        <div class="form__group">
-          <label for="level">Level</label>
-          <select name="level" id="level" v-model="formData.level" required>
-            <option value="" selected>Select Level</option>
-            <option value="100">100</option>
-            <option value="200">200</option>
-            <option value="300">300</option>
-            <option value="400">400</option>
-          </select>
-        </div>
+          <div class="form__group">
+            <label for="level">Level</label>
+            <select name="level" id="level" v-model="formData.level" required>
+              <option value="" selected>Select Level</option>
+              <option value="100">100</option>
+              <option value="200">200</option>
+              <option value="300">300</option>
+              <option value="400">400</option>
+            </select>
+          </div>
 
-        <div class="form__group">
-          <label for="gender">Gender</label>
-          <select name="gender" id="gender" v-model="formData.gender" required>
-            <option value="" selected>Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
+          <div class="form__group">
+            <label for="gender">Gender</label>
+            <select name="gender" id="gender" v-model="formData.gender" required>
+              <option value="" selected>Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
 
-        <div class="form__group">
-          <label for="catchPhrase">Catchphrase</label>
-          <textarea
-            id="catchPhrase"
-            v-model="formData.catchPhrase"
-            placeholder="lorem ipsum..."
-          ></textarea>
+          <div class="form__group">
+            <label for="catchPhrase">Catchphrase</label>
+            <textarea
+              id="catchPhrase"
+              v-model="formData.catchPhrase"
+              placeholder="lorem ipsum..."
+            ></textarea>
+          </div>
         </div>
-</div>
 
         <div class="form-actions">
-          <button type="submit" class="submit__btn">Add Candidate</button>
+          <button type="submit" class="submit__btn" :disabled="loading === true">
+            {{ loading === true ? 'Adding Candidate...' : 'Add Candidate' }}
+          </button>
           <button type="button" @click="$emit('close')" class="cancel__btn">Cancel</button>
         </div>
       </form>
@@ -82,9 +84,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const emit = defineEmits(['close', 'submit'])
+const emit = defineEmits(['close', 'submit']);
+const loading = defineProps({
+  type: Boolean,
+  required: true
+});
 
 const formData = ref({
   name: '',
@@ -93,11 +99,11 @@ const formData = ref({
   level: '',
   catchPhrase: '',
   gender: '',
-  studentId: '',
-})
+  studentId: ''
+});
 
 const handleSubmit = () => {
-  emit('submit', formData.value)
+  emit('submit', formData.value);
   formData.value = {
     name: '',
     alias: '',
@@ -105,9 +111,9 @@ const handleSubmit = () => {
     level: '',
     catchPhrase: '',
     gender: '',
-    studentId: '',
-  }
-}
+    studentId: ''
+  };
+};
 </script>
 
 <style scoped>
@@ -255,7 +261,7 @@ button {
   .form__group > * {
     font-size: 0.9rem;
   }
-  
+
   .form__group > label {
     min-width: 7rem;
   }

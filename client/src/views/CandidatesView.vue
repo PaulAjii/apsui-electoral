@@ -58,7 +58,12 @@
 
     <div v-else class="not__found">No Candidate found</div>
 
-    <AddCandidate v-if="showModal" @close="showModal = false" @submit="handleAddCandidate" />
+    <AddCandidate
+      v-if="showModal"
+      @close="showModal = false"
+      @submit="handleAddCandidate"
+      :loading="loading"
+    />
     <EditCandidate
       v-if="showEditModal"
       :candidate="selectedCandidate"
@@ -76,11 +81,12 @@ import AddCandidate from '@/components/AddCandidate.vue';
 import EditCandidate from '@/components/EditCandidate.vue';
 import { useToast } from 'vue-toastification';
 import BackButton from '@/components/BackButton.vue';
-import { getCandidates } from '@/services/apiServices';
+import { getCandidates, createCandidate, deleteCandidate } from '@/services/apiServices';
 
 const store = useCandidatesStore();
 
 const toast = useToast();
+const loading = ref(false);
 
 const showModal = ref(false);
 const showEditModal = ref(false);
@@ -90,22 +96,34 @@ const searchTerm = ref('');
 
 const handleAddCandidate = async (candidateData) => {
   try {
-    await postCandidate(candidateData);
-    showModal.value = false;
-    toast.success('Candidate added successfully');
+    loading.value = true;
+    const response = await createCandidate(candidateData, store);
+
+    if (response.status === 'success') {
+      showModal.value = false;
+      toast.success('Candidate added successfully');
+    }
   } catch (err) {
     showModal.value = false;
     toast.error(err);
+  } finally {
+    loading.value = false;
   }
 };
 
 const handleDeleteCandidate = async (id) => {
   if (confirm('Are you sure you want to delete this candidate?')) {
     try {
-      await deleteCandidate(id);
-      toast.success('Candidate deleted successfully');
+      loading.value = true;
+      const response = await deleteCandidate(id, store);
+
+      if (response.status === 'success') {
+        toast.success(response.message);
+      }
     } catch (err) {
       toast.error(err);
+    } finally {
+      loading.value = false;
     }
   }
 };

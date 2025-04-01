@@ -19,20 +19,10 @@ export const useCandidatesStore = defineStore('candidates', () => {
     candidates.value.push(data);
   };
 
-  const postCandidate = async (candidateData) => {
-    const data = await addCandidate(candidateData);
-
-    candidates.value = [data.candidate, ...candidates.value];
-
-    // localStorage.setItem('candidates', JSON.stringify(candidates.value))
-  };
-
-  const deleteCandidate = async (id) => {
-    const data = await removeCandidate(id);
+  const delCandidate = (id) => {
     candidates.value = candidates.value.filter((candidate) => candidate._id !== id);
-    // localStorage.setItem('candidates', JSON.stringify(candidates.value))
 
-    return data;
+    setCandidates(candidates.value);
   };
 
   const updateCandidate = async (id, updates) => {
@@ -50,8 +40,7 @@ export const useCandidatesStore = defineStore('candidates', () => {
     setCandidates,
     addCandidate,
     candidates,
-    postCandidate,
-    deleteCandidate,
+    delCandidate,
     updateCandidate
   };
 });

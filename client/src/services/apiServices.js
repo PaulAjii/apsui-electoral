@@ -50,9 +50,11 @@ export const createCandidate = async (candidateData, store) => {
   }
 };
 
-export const removeCandidate = async (id) => {
+export const deleteCandidate = async (id, store) => {
   try {
-    const { data } = await apiClient.delete(`/candidates/${id}`);
+    const { data } = await authenticatedClient.delete(`/candidates/${id}`);
+
+    store.delCandidate(id);
 
     return data;
   } catch (err) {
