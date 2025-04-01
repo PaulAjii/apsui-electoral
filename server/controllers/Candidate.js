@@ -17,18 +17,18 @@ export const getAllCandidates = asyncHandler(async (req, res) => {
 
 		if (!candidates) {
 			return res.status(StatusCodes.NOT_FOUND).json({
-				status: 0,
+				status: 'error',
 				message: 'No candidate found!',
 			});
 		}
 		res.status(StatusCodes.OK).json({
-			status: 1,
+			status: 'success',
 			no_of_candidates: candidates.length,
 			candidates,
 		});
 	} catch (err) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-			status: 0,
+			status: 'error',
 			message: err.message,
 		});
 	}
@@ -45,18 +45,18 @@ export const getSingleCandidate = asyncHandler(async (req, res) => {
 
 		if (!candidate) {
 			return res.status(StatusCodes.NOT_FOUND).json({
-				status: 0,
+				status: 'error',
 				message: 'Candidate not found!',
 			});
 		}
 
 		res.status(StatusCodes.OK).json({
-			status: 1,
+			status: 'success',
 			candidate,
 		});
 	} catch (err) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-			status: 0,
+			status: 'error',
 			message: err.message,
 		});
 	}
@@ -69,7 +69,7 @@ export const createCandidate = asyncHandler(async (req, res) => {
 
 		if (!studentId || !level || !position || !gender || !name) {
 			return res.status(StatusCodes.BAD_REQUEST).json({
-				status: 0,
+				status: 'error',
 				message: 'All fields are required',
 			});
 		}
@@ -79,7 +79,7 @@ export const createCandidate = asyncHandler(async (req, res) => {
 
 		if (!user) {
 			return res.status(StatusCodes.NOT_FOUND).json({
-				status: 0,
+				status: 'error',
 				message: 'User not found',
 			});
 		}
@@ -87,7 +87,7 @@ export const createCandidate = asyncHandler(async (req, res) => {
 		// Validate can Contest
 		if (!user.canContest()) {
 			return res.status(StatusCodes.BAD_REQUEST).json({
-				status: 0,
+				status: 'error',
 				message: 'User cannot contest',
 			});
 		}
@@ -98,7 +98,7 @@ export const createCandidate = asyncHandler(async (req, res) => {
 			ContestLevelEnum[level] !== user.level
 		) {
 			return res.status(StatusCodes.BAD_REQUEST).json({
-				status: 0,
+				status: 'error',
 				message: `Level does not match`,
 			});
 		}
@@ -106,7 +106,7 @@ export const createCandidate = asyncHandler(async (req, res) => {
 		// Validate Position
 		if (!PositionsByLevel[level]?.includes(position)) {
 			return res.status(StatusCodes.BAD_REQUEST).json({
-				status: 0,
+				status: 'error',
 				message: `Level not valid for position`,
 			});
 		}
@@ -114,7 +114,7 @@ export const createCandidate = asyncHandler(async (req, res) => {
 		// Validate Gender
 		if (!Object.values(GenderEnum).includes(gender)) {
 			return res.status(StatusCodes.BAD_REQUEST).json({
-				status: 0,
+				status: 'error',
 				message: `Gender does not match`,
 			});
 		}
@@ -132,12 +132,12 @@ export const createCandidate = asyncHandler(async (req, res) => {
 		}).select('-name');
 		const candidate = await candidateInstance.save();
 		res.status(StatusCodes.CREATED).json({
-			status: 1,
+			status: 'success',
 			candidate,
 		});
 	} catch (err) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-			status: 0,
+			status: 'error',
 			message: err.message,
 		});
 	}
@@ -151,18 +151,18 @@ export const deleteCandidate = asyncHandler(async (req, res) => {
 
 		if (!candidate) {
 			return res.status(StatusCodes.NOT_FOUND).json({
-				status: 0,
+				status: 'error',
 				message: 'Candidate not found!',
 			});
 		}
 
 		res.status(StatusCodes.OK).json({
-			status: 1,
+			status: 'success',
 			message: 'Candidate deleted successfully',
 		});
 	} catch (err) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-			status: 0,
+			status: 'error',
 			message: err.message,
 		});
 	}
@@ -196,18 +196,18 @@ export const updateCandidate = asyncHandler(async (req, res) => {
 
 		if (!candidate) {
 			return res.status(StatusCodes.NOT_FOUND).json({
-				status: 0,
+				status: 'error',
 				message: 'Candidate not found',
 			});
 		}
 
 		res.status(StatusCodes.OK).json({
-			status: 1,
+			status: 'success',
 			candidate,
 		});
 	} catch (err) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-			status: 0,
+			status: 'error',
 			message: err.message,
 		});
 	}
