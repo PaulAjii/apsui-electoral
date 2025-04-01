@@ -46,4 +46,15 @@ const router = createRouter({
   ]
 });
 
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+  const protectedRoutes = ['/voters/profile', '/polls', '/candidates'];
+
+  if (protectedRoutes.includes(to.path) && !token) {
+    next('/');
+  } else {
+    next();
+  }
+});
+
 export default router;

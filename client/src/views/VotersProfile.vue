@@ -1,6 +1,10 @@
 <template>
   <SectionLayout customClass="wrapper" sectionWrapper="profile__wrapper">
-    <BackButton />
+    <div class="btns">
+      <BackButton />
+
+      <LogoutButton />
+    </div>
     <header class="profile__header">
       <h2>Voter's Details</h2>
 
@@ -97,6 +101,7 @@ import { useVotersStore } from '@/store/voters';
 import { updateVoters, getAllVoters } from '@/services/apiServices';
 import CtaButton from '@/components/CtaButton.vue';
 import BackButton from '@/components/BackButton.vue';
+import LogoutButton from '@/components/LogoutButton.vue';
 
 const voterStore = useVotersStore();
 const toast = useToast();
@@ -181,6 +186,13 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.btns {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 600px;
+}
+
 .profile__header,
 .action__btn > header {
   width: 100%;

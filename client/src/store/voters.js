@@ -16,5 +16,11 @@ export const useVotersStore = defineStore('voters', () => {
     voters.value = data;
   };
 
-  return { voter, getVoter, setVoter, setAllVoters, voters };
+  const logout = () => {
+    localStorage.removeItem('voterDetails');
+    localStorage.removeItem('token');
+    voter.value = null;
+  };
+
+  return { voter, getVoter, setVoter, setAllVoters, voters, logout };
 });
