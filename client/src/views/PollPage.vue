@@ -85,7 +85,7 @@
       </button>
 
       <button
-        v-if="currentIndex === Object.keys(groupedCandidates).length - 1"
+        v-if="currentIndex === Object.keys(groupedCandidates).length - 1 && voterStore.voter.hasVoted === false && voterStore.voter.role !== 'admin'"
         class="nav-btn submit"
         @click="submitVotes"
         :disabled="loading"
@@ -104,7 +104,7 @@ import BackButton from '@/components/BackButton.vue';
 import gsap from 'gsap';
 import { useToast } from 'vue-toastification';
 
-import { getCandidates } from '@/services/apiServices';
+import { getCandidates, castVote } from '@/services/apiServices';
 import { useCandidatesStore } from '@/store/contestants';
 import { useVotersStore } from '@/store/voters';
 
@@ -244,6 +244,11 @@ const submitVotes = async () => {
     const voteData = formatVotes();
 
     console.log(voteData);
+    const response = await castVote(voteData);
+    
+    if (response.status === "success") {
+      toast.success(response.message)
+    }
   } catch (err) {
     toast.error(err.message);
   } finally {
