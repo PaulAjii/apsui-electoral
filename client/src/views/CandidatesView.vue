@@ -110,7 +110,7 @@ const handleAddCandidate = async (candidateData) => {
     }
   } catch (err) {
     showModal.value = false;
-    toast.error(err);
+    toast.error(err.message);
   } finally {
     loading.value = false;
   }
@@ -126,7 +126,7 @@ const handleDeleteCandidate = async (id) => {
         toast.success(response.message);
       }
     } catch (err) {
-      toast.error(err);
+      toast.error(err.message);
     } finally {
       loading.value = false;
     }
@@ -149,7 +149,7 @@ const handleEditCandidate = async (updates) => {
       toast.success('Candidate updated successfully');
     }
   } catch (err) {
-    toast.error(err);
+    toast.error(err.message);
   } finally {
     loading.value = true;
   }

@@ -131,7 +131,7 @@ onMounted(async () => {
     loading.value = true;
     await getAllVoters(voterStore);
   } catch (error) {
-    toast.error('Failed to load voter data');
+    toast.error(error.message || 'Failed to load voter data');
   } finally {
     loading.value = false;
   }

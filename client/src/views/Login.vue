@@ -63,7 +63,7 @@ const handleSubmit = async () => {
       }
     }
   } catch (err) {
-    toast.error(err?.response?.data?.message || 'An error occurred. Please try again.');
+    toast.error(err.message);
   } finally {
     isLoading.value = false;
   }

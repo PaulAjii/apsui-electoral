@@ -35,7 +35,6 @@ const router = useRouter();
 const voterStore = useVotersStore();
 
 const isLoading = ref(false);
-const error = ref(null);
 
 const handleSubmit = async () => {
   try {
@@ -52,8 +51,7 @@ const handleSubmit = async () => {
       router.push('/voters/profile');
     }
   } catch (err) {
-    error.value = err.message;
-    toast.error(err.response.data.message || err.message);
+    toast.error(err.message);
   } finally {
     isLoading.value = false;
   }

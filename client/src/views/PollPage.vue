@@ -5,7 +5,7 @@
 
       <div class="menu">
         <RouterLink to="/" class="nav__link">Home</RouterLink>
-        <RouterLink to="/candidates" class="nav__link">Candidates</RouterLink>
+        <RouterLink to="/voters/profile" class="nav__link">Profile</RouterLink>
         <p class="nav__link active">Poll</p>
       </div>
     </nav>
@@ -57,38 +57,44 @@
       </fieldset>
     </div>
 
-    <div class="navigation-controls" v-if="currentPosition">
-      <button class="nav-btn prev" @click="prevPosition" :disabled="currentIndex === 0">
-        Previous
-      </button>
+    <div class="navigation__controls" v-if="currentPosition">
+      <div class="navigation__control-btns">
+        <button class="nav__btn prev" @click="prevPosition" :disabled="currentIndex === 0">
+          Previous
+        </button>
 
-      <!-- Progress Indicators -->
-      <div class="progress__pagination">
-        <button
-          v-for="(position, index) in Object.keys(groupedCandidates)"
-          :key="index"
-          :class="[
-            'progress__nums',
-            {
-              active: currentIndex === index,
-              completed: votedPositions[position]
-            }
-          ]"
-          @click="navigateToPosition(index)"
-        >
-          {{ index + 1 }}
+        <!-- Progress Indicators -->
+        <div class="progress__pagination">
+          <button
+            v-for="(position, index) in Object.keys(groupedCandidates)"
+            :key="index"
+            :class="[
+              'progress__nums',
+              {
+                active: currentIndex === index,
+                completed: votedPositions[position]
+              }
+            ]"
+            @click="navigateToPosition(index)"
+          >
+            {{ index + 1 }}
+          </button>
+        </div>
+
+        <button class="nav__btn skip" @click="nextPosition">
+          {{ hasSelection ? 'Continue' : 'Skip' }}
         </button>
       </div>
 
-      <button class="nav-btn skip" @click="nextPosition">
-        {{ hasSelection ? 'Continue' : 'Skip' }}
-      </button>
-
       <button
-        v-if="currentIndex === Object.keys(groupedCandidates).length - 1 && voterStore.voter.hasVoted === false && voterStore.voter.role !== 'admin'"
-        class="nav-btn submit"
+        v-if="
+          (currentIndex === Object.keys(groupedCandidates).length - 1 &&
+            voterStore.voter.hasVoted === false) ||
+          voterStore.voter.role !== 'admin'
+        "
+        class="nav__btn submit"
         @click="submitVotes"
-        :disabled="loading"
+        :disabled="loading || !hasAnyVotes || voterStore.voter.hasVoted"
       >
         {{ loading ? 'Submitting...' : 'Submit Votes' }}
       </button>
@@ -107,6 +113,7 @@ import { useToast } from 'vue-toastification';
 import { getCandidates, castVote } from '@/services/apiServices';
 import { useCandidatesStore } from '@/store/contestants';
 import { useVotersStore } from '@/store/voters';
+import router from '@/router';
 
 const store = useCandidatesStore();
 const voterStore = useVotersStore();
@@ -184,7 +191,6 @@ const selectCandidate = (candidateId) => {
 
     if (senateVotes.includes(candidateId)) {
       selectedVotes.value[position] = senateVotes.filter((id) => id !== candidateId);
-      // Update voted positions status
       votedPositions.value[position] = selectedVotes.value[position].length > 0;
     } else if (senateVotes.length < 3) {
       selectedVotes.value[position] = [...senateVotes, candidateId];
@@ -194,10 +200,17 @@ const selectCandidate = (candidateId) => {
       return;
     }
   } else {
-   selectedVotes.value[position] = [candidateId];
+    selectedVotes.value[position] = [candidateId];
     votedPositions.value[position] = true;
   }
 };
+
+const hasAnyVotes = computed(() => {
+  return Object.values(selectedVotes.value).some(
+    (votes) => Array.isArray(votes) && votes.length > 0
+  );
+});
+console.log(hasAnyVotes.value);
 
 const animateTransition = (direction) => {
   const container = pollContainer.value;
@@ -242,16 +255,19 @@ const submitVotes = async () => {
     loading.value = true;
     const voteData = formatVotes();
 
-    console.log(voteData);
     const response = await castVote(voteData);
-    
-    if (response.status === "success") {
-      toast.success(response.message)
+
+    if (response.status === 'success') {
+      toast.success(response.message);
     }
   } catch (err) {
     toast.error(err.message);
   } finally {
     loading.value = false;
+
+    setTimeout(() => {
+      router.push('/voters/profile');
+    }, 3000);
   }
 };
 onMounted(async () => {
@@ -264,8 +280,8 @@ onMounted(async () => {
         toast.success('Candidates fetched successfully');
       }
     }
-  } catch (err) {
-    toast.err(err.message);
+  } catch (error) {
+    toast.err(error.message);
   } finally {
     loading.value = false;
   }
@@ -290,7 +306,7 @@ onMounted(async () => {
 }
 
 .votes {
-  font-size: 1.2rem;
+  font-size: 0.875rem;
   font-weight: 600;
 }
 
@@ -301,13 +317,13 @@ onMounted(async () => {
 }
 
 fieldset {
-  border: 5px solid rgb(220, 220, 220);
+  border: 2px solid rgb(220, 220, 220);
   border-radius: 1rem;
-  padding: 0 1rem 3rem;
+  padding: 0 1rem 1rem;
 }
 
 legend {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 2px;
   text-align: left;
@@ -319,45 +335,41 @@ legend {
   overflow-y: visible;
 }
 
+.navigation__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.navigation__control-btns {
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav__btn {
+  width: 20%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
 .progress__pagination {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-block: 1rem 0;
+  align-items: center;
+  gap: 5px;
   position: relative;
 }
 
-.progress__pagination::after,
-.progress__pagination::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-
-  background-color: green;
-  width: 100px;
-  height: 2.5px;
-}
-
-.progress__pagination::after {
-  right: 50%;
-  transform: translateX(-80%);
-}
-
-.progress__pagination::before {
-  left: 50%;
-  transform: translateX(80%);
-}
-
 .progress__nums {
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
   font-weight: 600;
-  /* padding: 0.15rem 0.45rem; */
   border-radius: 10px;
   border: 1px solid #ddd;
   background: transparent;
@@ -377,33 +389,68 @@ legend {
   color: white;
 }
 
-.navigation-controls {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 2rem;
-}
-
-.nav-btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
 .candidate.selected {
   border: 1px solid #4caf50;
   transform: scale(1.01);
 }
 
-.nav-btn.submit {
+.nav__btn.submit {
+  width: 100%;
+  padding-block: 0.5rem;
   background-color: #4caf50;
   color: white;
   font-weight: bold;
 }
 
-.nav-btn.submit:disabled {
+.nav__btn.submit:disabled {
+  border: 1px solid #cccccc;
   background-color: #cccccc;
   cursor: not-allowed;
+}
+
+@media screen and (min-width: 700px) {
+  .votes {
+    font-size: 1.2rem;
+  }
+
+  fieldset {
+    border: 4px solid rgb(220, 220, 220);
+    padding: 0 1rem 2rem;
+  }
+
+  legend {
+    font-size: 1.1rem;
+  }
+
+  .progress__pagination::after,
+  .progress__pagination::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+
+    background-color: green;
+    width: 100px;
+    height: 2.5px;
+  }
+
+  .progress__pagination::after {
+    right: 50%;
+    transform: translateX(-80%);
+  }
+
+  .progress__pagination::before {
+    left: 50%;
+    transform: translateX(80%);
+  }
+
+  .nav__btn {
+    font-size: 1rem;
+  }
+
+  .progress__nums {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
 }
 </style>

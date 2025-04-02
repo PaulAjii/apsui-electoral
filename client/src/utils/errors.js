@@ -1,10 +1,10 @@
 export const errorHandler = (err) => {
-    const { response } = err
-    if (response.status !== 500) {
-        console.error('Error adding candidate...', response.data.message)
-        throw response.data.message
-    } else {
-        console.error('Error adding candidate...', response.statusText)
-        throw response.statusText
-    }
-}
+  if (err.response) {
+    const message = err.response.data.message || err.response.statusText;
+    throw new Error(message);
+  } else if (err.request) {
+    throw new Error('Network error. Please check your connection.');
+  } else {
+    throw new Error(err.message || 'An unexpected error occurred');
+  }
+};

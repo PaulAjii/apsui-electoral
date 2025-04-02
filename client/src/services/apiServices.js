@@ -34,7 +34,7 @@ export const getCandidates = async (store) => {
 
     return data;
   } catch (err) {
-    errorHandler(err);
+    throw errorHandler(err);
   }
 };
 
@@ -46,7 +46,7 @@ export const createCandidate = async (candidateData, store) => {
 
     return data;
   } catch (err) {
-    errorHandler(err);
+    throw errorHandler(err);
   }
 };
 
@@ -58,7 +58,7 @@ export const deleteCandidate = async (id, store) => {
 
     return data;
   } catch (err) {
-    errorHandler(err);
+    throw errorHandler(err);
   }
 };
 
@@ -70,7 +70,7 @@ export const editCandidate = async (id, updates, store) => {
 
     return data;
   } catch (err) {
-    errorHandler(err);
+    throw errorHandler(err);
   }
 };
 
@@ -83,7 +83,7 @@ export const getVoter = async (id, store) => {
 
     return data;
   } catch (err) {
-    errorHandler(err);
+    throw errorHandler(err);
   }
 };
 
@@ -93,7 +93,7 @@ export const getAllVoters = async (store) => {
 
     store.setAllVoters(data.users);
   } catch (err) {
-    errorHandler(err);
+    throw errorHandler(err);
   }
 
   // return data.status;
@@ -107,7 +107,7 @@ export const updateVoters = async (id, updates, store) => {
 
     return data;
   } catch (err) {
-    errorHandler(err);
+    throw errorHandler(err);
   }
 };
 
@@ -120,7 +120,7 @@ export const loginUser = async (userData, store) => {
 
     return data;
   } catch (err) {
-    errorHandler(err);
+    throw errorHandler(err);
   }
 };
 
@@ -130,7 +130,7 @@ export const resetPassword = async (userData) => {
 
     return data;
   } catch (err) {
-    errorHandler(err);
+    throw errorHandler(err);
   }
 };
 
@@ -140,6 +140,6 @@ export const castVote = async (votes) => {
 
     return data;
   } catch (err) {
-    errorHandler(err);
+    throw errorHandler(err);
   }
 };
