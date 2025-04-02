@@ -23,38 +23,34 @@
       </p>
     </header>
 
-    <div class="candidates__layout">
-      <fieldset v-if="currentPosition" :key="currentPosition">
-        <legend>
-          {{ currentCandidates.length > 1 ? `${currentPosition}s` : currentPosition }}
-        </legend>
-        <p class="total__candidates">Number of Candidates: {{ currentCandidates.length }}</p>
-        <div class="candidates__inner-wrapper" ref="pollContainer">
-          <div
-            v-for="candidate in currentCandidates"
-            :key="candidate._id"
-            :class="[
-              'candidate',
-              {
-                selected: selectedVotes[currentPosition]?.includes(candidate._id)
-              }
-            ]"
-            @click="selectCandidate(candidate._id)"
-          >
-            <div class="candidate__img">
-              <img :src="candidate.imageURL" :alt="candidate.alias" />
-            </div>
+    <div class="candidates__layout" v-if="currentPosition" :key="currentPosition">
+      <p class="legend">
+        {{ currentCandidates.length > 1 ? `${currentPosition}s` : currentPosition }}
+      </p>
+      <p class="total__candidates">Number of Candidates: {{ currentCandidates.length }}</p>
+      <div class="candidates__inner-wrapper" ref="pollContainer">
+        <div
+          v-for="candidate in currentCandidates"
+          :key="candidate._id"
+          :class="[
+            'candidate',
+            {
+              selected: selectedVotes[currentPosition]?.includes(candidate._id)
+            }
+          ]"
+          @click="selectCandidate(candidate._id)"
+        >
+          <div class="candidate__img">
+            <img :src="candidate.imageURL" :alt="candidate.alias" />
+          </div>
 
-            <div class="candidate__info">
-              <p class="info__field"><span class="label">Name: </span>{{ candidate.name }}</p>
-              <p class="info__field"><span class="label">Alias: </span>{{ candidate.alias }}</p>
-              <p class="info__field">
-                <span class="label">Level: </span>{{ candidate.user.level }}
-              </p>
-            </div>
+          <div class="candidate__info">
+            <p class="info__field"><span class="label">Name: </span>{{ candidate.name }}</p>
+            <p class="info__field"><span class="label">Alias: </span>{{ candidate.alias }}</p>
+            <p class="info__field"><span class="label">Level: </span>{{ candidate.user.level }}</p>
           </div>
         </div>
-      </fieldset>
+      </div>
     </div>
 
     <div class="navigation__controls" v-if="currentPosition">
@@ -255,7 +251,7 @@ const submitVotes = async () => {
     loading.value = true;
     const voteData = formatVotes();
 
-    const response = await castVote(voteData);
+    const response = await castVote(voteData, voterStore);
 
     if (response.status === 'success') {
       toast.success(response.message);
@@ -311,18 +307,12 @@ onMounted(async () => {
 }
 
 .candidates__layout {
-  padding-block: 1rem;
+  padding: 1rem;
   display: grid;
   gap: 2rem;
 }
 
-fieldset {
-  border: 2px solid rgb(220, 220, 220);
-  border-radius: 1rem;
-  padding: 0 1rem 1rem;
-}
-
-legend {
+.legend {
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 2px;
@@ -332,7 +322,41 @@ legend {
 }
 
 .candidates__inner-wrapper {
-  overflow-y: visible;
+  height: 300px;
+  display: flex;
+  gap: 1rem;
+  padding-inline: 1rem;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.candidates__inner-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.candidates__inner-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 8px;
+}
+
+.candidates__inner-wrapper::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8px;
+  border: 2px solid #f1f1f1;
+}
+
+.candidates__inner-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.candidate {
+  padding-top: 1rem;
+  scroll-snap-align: start;
+  max-width: 250px;
+  max-height: 250px;
 }
 
 .navigation__controls {
@@ -413,12 +437,11 @@ legend {
     font-size: 1.2rem;
   }
 
-  fieldset {
-    border: 4px solid rgb(220, 220, 220);
+  .candidates__layout {
     padding: 0 1rem 2rem;
   }
 
-  legend {
+  .legend {
     font-size: 1.1rem;
   }
 
@@ -451,6 +474,20 @@ legend {
     width: 30px;
     height: 30px;
     border-radius: 50%;
+  }
+
+  .candidates__inner-wrapper {
+    height: 350px;
+    gap: 2rem;
+  }
+
+  .candidate {
+    max-width: 320px;
+    max-height: 320px;
+  }
+
+  .total__candidates {
+    margin-bottom: 0;
   }
 }
 </style>

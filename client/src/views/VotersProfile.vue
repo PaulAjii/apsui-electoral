@@ -18,10 +18,19 @@
 
       <button
         type="button"
+        class="invisible"
         v-if="voterStore.voter.role === 'voter' && voterStore.voter.hasVoted === false"
         @click="router.push('/polls')"
       >
         Polls
+      </button>
+
+      <button
+        type="button"
+        v-if="voterStore.voter.role === 'voter' && voterStore.voter.hasVoted === false"
+        @click="router.push('/')"
+      >
+        Home
       </button>
     </header>
 

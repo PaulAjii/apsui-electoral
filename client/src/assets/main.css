@@ -239,6 +239,10 @@ button {
   padding-inline: 0.75rem;
 }
 
+.invisible {
+  display: none;
+}
+
 @media screen and (min-width: 700px) {
   .hero {
     height: calc(100dvh - 4.5rem);

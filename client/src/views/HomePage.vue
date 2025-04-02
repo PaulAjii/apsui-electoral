@@ -16,8 +16,9 @@
       <p class="subtitle">
         <b>Shape the Future of APS—Your Vote Matters!</b> <br />
 
-Your voice drives our community forward. By voting, you influence decisions on events, advocacy, and resources that shape the association.<br />Every ballot fuels progress.<br />
-Don’t let others decide for you.
+        Your voice drives our community forward. By voting, you influence decisions on events,
+        advocacy, and resources that shape the association.<br />Every ballot fuels progress.<br />
+        Don’t let others decide for you.
       </p>
 
       <div class="cta__btns">

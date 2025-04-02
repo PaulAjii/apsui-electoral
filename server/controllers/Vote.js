@@ -80,7 +80,7 @@ export const castVote = async (req, res) => {
 		res.status(StatusCodes.OK).json({
 			status: 'success',
 			message: 'Vote has been cast successfully',
-			votedPositions: voter.votedPositions,
+			voter,
 		});
 	} catch (err) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
