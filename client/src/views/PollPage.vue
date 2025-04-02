@@ -169,7 +169,6 @@ const hasSelection = computed(() => {
     return votes?.length > 0 && votes.length <= 3;
   }
 
-  console.log(selectedVotes.value);
   return votes?.length === 1;
 });
 
