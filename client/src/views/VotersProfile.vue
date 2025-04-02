@@ -16,7 +16,11 @@
         Candidates
       </button>
 
-      <button type="button" v-if="voterStore.voter.role === 'voter'" @click="router.push('/polls')">
+      <button
+        type="button"
+        v-if="voterStore.voter.role === 'voter' && voterStore.voter.hasVoted === false"
+        @click="router.push('/polls')"
+      >
         Polls
       </button>
     </header>
