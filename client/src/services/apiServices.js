@@ -134,9 +134,13 @@ export const resetPassword = async (userData) => {
   }
 };
 
-export const castVote = async (votes) => {
+export const castVote = async (votes, store) => {
   try {
     const { data } = await authenticatedClient.post('/vote/cast', votes);
+
+    console.log(data);
+
+    store.setVoter(data.voter);
 
     return data;
   } catch (err) {
