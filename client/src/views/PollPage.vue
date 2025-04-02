@@ -183,25 +183,19 @@ const selectCandidate = (candidateId) => {
 
     const senateVotes = selectedVotes.value[position];
 
-    // If already selected, remove it
     if (senateVotes.includes(candidateId)) {
       selectedVotes.value[position] = senateVotes.filter((id) => id !== candidateId);
       // Update voted positions status
       votedPositions.value[position] = selectedVotes.value[position].length > 0;
-    }
-    // If not selected and haven't reached max votes
-    else if (senateVotes.length < 3) {
+    } else if (senateVotes.length < 3) {
       selectedVotes.value[position] = [...senateVotes, candidateId];
       votedPositions.value[position] = true;
-    }
-    // If trying to vote more than 3
-    else {
+    } else {
       toast.error('Maximum of 3 senate votes allowed');
       return;
     }
   } else {
-    // For non-senate positions, keep single selection
-    selectedVotes.value[position] = [candidateId]; // Wrap in array to match backend format
+   selectedVotes.value[position] = [candidateId];
     votedPositions.value[position] = true;
   }
 };
