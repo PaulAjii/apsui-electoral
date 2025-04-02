@@ -85,7 +85,7 @@
       </button>
 
       <button
-        v-if="currentIndex === Object.keys(groupedCandidates).length - 1"
+        v-if="currentIndex === Object.keys(groupedCandidates).length - 1 && voterStore.voter.hasVoted === false && voterStore.voter.role !== 'admin'"
         class="nav-btn submit"
         @click="submitVotes"
         :disabled="loading"
@@ -104,7 +104,7 @@ import BackButton from '@/components/BackButton.vue';
 import gsap from 'gsap';
 import { useToast } from 'vue-toastification';
 
-import { getCandidates } from '@/services/apiServices';
+import { getCandidates, castVote } from '@/services/apiServices';
 import { useCandidatesStore } from '@/store/contestants';
 import { useVotersStore } from '@/store/voters';
 
@@ -182,25 +182,19 @@ const selectCandidate = (candidateId) => {
 
     const senateVotes = selectedVotes.value[position];
 
-    // If already selected, remove it
     if (senateVotes.includes(candidateId)) {
       selectedVotes.value[position] = senateVotes.filter((id) => id !== candidateId);
       // Update voted positions status
       votedPositions.value[position] = selectedVotes.value[position].length > 0;
-    }
-    // If not selected and haven't reached max votes
-    else if (senateVotes.length < 3) {
+    } else if (senateVotes.length < 3) {
       selectedVotes.value[position] = [...senateVotes, candidateId];
       votedPositions.value[position] = true;
-    }
-    // If trying to vote more than 3
-    else {
+    } else {
       toast.error('Maximum of 3 senate votes allowed');
       return;
     }
   } else {
-    // For non-senate positions, keep single selection
-    selectedVotes.value[position] = [candidateId]; // Wrap in array to match backend format
+   selectedVotes.value[position] = [candidateId];
     votedPositions.value[position] = true;
   }
 };
@@ -249,6 +243,11 @@ const submitVotes = async () => {
     const voteData = formatVotes();
 
     console.log(voteData);
+    const response = await castVote(voteData);
+    
+    if (response.status === "success") {
+      toast.success(response.message)
+    }
   } catch (err) {
     toast.error(err.message);
   } finally {

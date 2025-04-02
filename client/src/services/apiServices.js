@@ -133,3 +133,13 @@ export const resetPassword = async (userData) => {
     errorHandler(err);
   }
 };
+
+export const castVote = async (votes) => {
+  try {
+    const { data } = await authenticatedClient.post('/vote/cast', votes);
+
+    return data;
+  } catch (err) {
+    errorHandler(err);
+  }
+};
