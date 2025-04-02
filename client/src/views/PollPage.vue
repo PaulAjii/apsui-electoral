@@ -23,20 +23,20 @@
       </p>
     </header>
 
-    <div class="candidates__layout" ref="pollContainer">
+    <div class="candidates__layout">
       <fieldset v-if="currentPosition" :key="currentPosition">
         <legend>
           {{ currentCandidates.length > 1 ? `${currentPosition}s` : currentPosition }}
         </legend>
         <p class="total__candidates">Number of Candidates: {{ currentCandidates.length }}</p>
-        <div class="candidates__inner-wrapper">
+        <div class="candidates__inner-wrapper" ref="pollContainer">
           <div
             v-for="candidate in currentCandidates"
             :key="candidate._id"
             :class="[
               'candidate',
               {
-                selected: selectedVotes[currentPosition] === candidate._id
+                selected: selectedVotes[currentPosition]?.includes(candidate._id)
               }
             ]"
             @click="selectCandidate(candidate._id)"
@@ -93,29 +93,51 @@ import { onMounted, computed, ref } from 'vue';
 import SectionLayout from '@/layout/SectionLayout.vue';
 import BackButton from '@/components/BackButton.vue';
 import gsap from 'gsap';
+import { useToast } from 'vue-toastification';
 
+import { getCandidates } from '@/services/apiServices';
 import { useCandidatesStore } from '@/store/contestants';
+import { useVotersStore } from '@/store/voters';
+
 const store = useCandidatesStore();
+const voterStore = useVotersStore();
+const toast = useToast();
 
 const currentIndex = ref(0);
 const selectedVotes = ref({});
 const votedPositions = ref({});
 const pollContainer = ref(null);
 const total = ref(null);
+const loading = ref(false);
 
 const groupedCandidates = computed(() => {
-  return store.candidates.reduce((groups, candidate) => {
+  const groups = store.candidates.reduce((acc, candidate) => {
     const position = candidate.position;
 
-    if (!groups[position]) {
-      groups[position] = [];
+    if (!acc[position]) {
+      acc[position] = [];
     }
 
-    groups[position].push(candidate);
+    if (position === 'Senate') {
+      if (candidate.user.level === voterStore.voter.level) {
+        acc[position].push(candidate);
+      }
+    } else {
+      acc[position].push(candidate);
+    }
 
-    total.value = Object.keys(groups).length;
-    return groups;
+    return acc;
   }, {});
+
+  const filteredGroups = Object.entries(groups).reduce((acc, [position, candidates]) => {
+    if (candidates.length > 0) {
+      acc[position] = candidates;
+    }
+    return acc;
+  }, {});
+
+  total.value = Object.keys(filteredGroups).length;
+  return filteredGroups;
 });
 
 const votes = computed(() => {
@@ -131,12 +153,48 @@ const currentCandidates = computed(() => {
 });
 
 const hasSelection = computed(() => {
-  return selectedVotes.value[currentPosition.value] !== undefined;
+  const position = currentPosition.value;
+  const votes = selectedVotes.value[position];
+
+  if (position === 'Senate') {
+    return votes?.length > 0 && votes.length <= 3;
+  }
+
+  console.log(selectedVotes.value);
+  return votes?.length === 1;
 });
 
 const selectCandidate = (candidateId) => {
-  selectedVotes.value[currentPosition.value] = candidateId;
-  votedPositions.value[currentPosition.value] = true;
+  const position = currentPosition.value;
+
+  if (position === 'Senate') {
+    if (!selectedVotes.value[position]) {
+      selectedVotes.value[position] = [];
+    }
+
+    const senateVotes = selectedVotes.value[position];
+
+    // If already selected, remove it
+    if (senateVotes.includes(candidateId)) {
+      selectedVotes.value[position] = senateVotes.filter((id) => id !== candidateId);
+      // Update voted positions status
+      votedPositions.value[position] = selectedVotes.value[position].length > 0;
+    }
+    // If not selected and haven't reached max votes
+    else if (senateVotes.length < 3) {
+      selectedVotes.value[position] = [...senateVotes, candidateId];
+      votedPositions.value[position] = true;
+    }
+    // If trying to vote more than 3
+    else {
+      toast.error('Maximum of 3 senate votes allowed');
+      return;
+    }
+  } else {
+    // For non-senate positions, keep single selection
+    selectedVotes.value[position] = [candidateId]; // Wrap in array to match backend format
+    votedPositions.value[position] = true;
+  }
 };
 
 const animateTransition = (direction) => {
@@ -168,9 +226,41 @@ const navigateToPosition = (index) => {
   currentIndex.value = index;
 };
 
-onMounted(() => {
-  if (store.candidates.length === 0) {
-    store.fetchCandidates();
+const formateVotes = () => {
+  const formattedVotes = Object.entries(selectedVotes.value).map(([position, candidateIds]) => ({
+    position,
+    candidateIds: Array.isArray(candidates) ? candidateIds : [candidateIds]
+  }));
+
+  return { votes: formattedVotes };
+};
+
+const submitVotes = async () => {
+  try {
+    loading.value = true;
+    const voteData = formatVotes();
+
+    console.log(voteData);
+  } catch (err) {
+    toast.error(err.message);
+  } finally {
+    loading.value = false;
+  }
+};
+onMounted(async () => {
+  try {
+    loading.value = true;
+    if (store.candidates.length === 0) {
+      const response = await getCandidates(store);
+
+      if (response.status === 'success') {
+        toast.success('Candidates fetched successfully');
+      }
+    }
+  } catch (err) {
+    toast.err(err.message);
+  } finally {
+    loading.value = false;
   }
 });
 </script>
@@ -198,24 +288,28 @@ onMounted(() => {
 }
 
 .candidates__layout {
-  padding-block: 2rem;
+  padding-block: 1rem;
   display: grid;
   gap: 2rem;
 }
 
 fieldset {
-  border: 1px solid rgb(220, 220, 220);
+  border: 5px solid rgb(220, 220, 220);
   border-radius: 1rem;
-  padding: 0 1rem 1.5rem;
+  padding: 0 1rem 3rem;
 }
 
 legend {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 2px;
-  text-align: center;
-  margin-bottom: 1rem;
+  text-align: left;
+  margin-bottom: 0.5rem;
   padding-inline: 1rem;
+}
+
+.candidates__inner-wrapper {
+  overflow-y: visible;
 }
 
 .progress__pagination {
@@ -248,12 +342,15 @@ legend {
 }
 
 .progress__nums {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
   font-weight: 600;
-  padding: 0.15rem 0.45rem;
+  /* padding: 0.15rem 0.45rem; */
   border-radius: 10px;
   border: 1px solid #ddd;
   background: transparent;

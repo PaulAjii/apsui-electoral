@@ -1,52 +1,90 @@
 import { StatusCodes } from 'http-status-codes';
 import Vote from '../models/Vote.js';
 import Candidate from '../models/Candidate.js';
+import Users from '../models/Users.js';
 
 export const castVote = async (req, res) => {
 	try {
-		const { alias, position, isVotedYes } = req.body;
+		const { votes } = req.body; // { position, candidateIds}
+		const { studentId } = req.user;
 
-		if (!alias || !position) {
+		if (!votes || !Array.isArray(votes)) {
 			return res.status(StatusCodes.BAD_REQUEST).json({
-				status: 0,
-				message: 'All fields are required',
+				status: 'error',
+				message: 'Invalid VOte format',
 			});
 		}
 
-		//    Validate User by auth token
+		const voter = await Users.findOne({ studentId });
 
-		// Validate Candidate
-		const candidate = await Candidate.findOne({ alias, position }).populate(
-			'user'
-		);
-
-		if (!candidate) {
-			return res.status(StatusCodes.NOT_FOUND).json({
-				status: 0,
-				message: 'Candidate can not be found',
+		if (voter.hasVoted === true) {
+			return res.status(StatusCodes.BAD_REQUEST).json({
+				status: 'error',
+				message: 'You have voted already',
 			});
 		}
 
-		const vote = new Vote({
-			candidate: candidate._id,
-			isVotedYes,
-		});
+		for (const voteData of votes) {
+			const { position, candidateIds } = voteData;
 
-		await vote.save();
+			if (position === 'Senate') {
+				if (candidateIds.length > 3) {
+					return res.status(StatusCodes.BAD_REQUEST).json({
+						status: 'error',
+						message: 'Maximum of 3 votes can be cast for senate',
+					});
+				}
 
-		if (isVotedYes) {
-			candidate.votesCount = (candidate.votesCount || 0) + 1;
-			await candidate.save();
+				const senateCandidate = await Candidate.find({
+					_id: { $in: candidateIds },
+				}).populate('user');
+
+				const hasInvalidLevel = senateCandidate.some(
+					(candidate) => candidate.user.level != +voter.level
+				);
+
+				if (hasInvalidLevel) {
+					return res.status(StatusCodes.FORBIDDEN).json({
+						status: 'error',
+						message:
+							'Can only vote for senate candidates in your level',
+					});
+				}
+			}
+
+			for (const candidateId of candidateIds) {
+				const candidate = await Candidate.findById(candidateId);
+
+				if (!candidate || candidate.position !== position) {
+					return res.status(StatusCodes.BAD_REQUEST).json({
+						status: 'error',
+						message: 'Invalid Position',
+					});
+				}
+
+				const vote = new Vote({
+					candidate: candidate._id,
+					isVotedYes: true,
+				});
+
+				await vote.save();
+
+				candidate.votesCount = (candidate.votesCount || 0) + 1;
+				await candidate.save();
+			}
+			voter.votedPositions.push(position);
+			voter.hasVoted = true;
+			await voter.save();
 		}
 
 		res.status(StatusCodes.OK).json({
-			status: 1,
+			status: 'success',
 			message: 'Vote has been cast successfully',
-			candidate,
+			votedPositions: voter.votedPositions,
 		});
 	} catch (err) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-			status: 0,
+			status: 'error',
 			message: err.message,
 		});
 	}
@@ -57,12 +95,12 @@ export const getResults = async (req, res) => {
 		const results = await Vote.getResultsByPosition();
 
 		res.status(StatusCodes.OK).json({
-			status: 1,
+			status: 'success',
 			results,
 		});
 	} catch (err) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-			status: 0,
+			status: 'error',
 			message: err.message,
 		});
 	}
