@@ -83,6 +83,15 @@
       <button class="nav-btn skip" @click="nextPosition">
         {{ hasSelection ? 'Continue' : 'Skip' }}
       </button>
+
+      <button
+        v-if="currentIndex === Object.keys(groupedCandidates).length - 1"
+        class="nav-btn submit"
+        @click="submitVotes"
+        :disabled="loading"
+      >
+        {{ loading ? 'Submitting...' : 'Submit Votes' }}
+      </button>
     </div>
   </SectionLayout>
 </template>
@@ -387,5 +396,16 @@ legend {
 .candidate.selected {
   border: 1px solid #4caf50;
   transform: scale(1.01);
+}
+
+.nav-btn.submit {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+}
+
+.nav-btn.submit:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 </style>
