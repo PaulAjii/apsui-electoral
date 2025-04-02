@@ -235,7 +235,7 @@ const navigateToPosition = (index) => {
   currentIndex.value = index;
 };
 
-const formateVotes = () => {
+const formatVotes = () => {
   const formattedVotes = Object.entries(selectedVotes.value).map(([position, candidateIds]) => ({
     position,
     candidateIds: Array.isArray(candidates) ? candidateIds : [candidateIds]
