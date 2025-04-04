@@ -59,12 +59,20 @@ const formData = ref({ ...props.candidate });
 const imagePreview = ref(null);
 const imageError = ref('');
 
-const handleImageChange = (e) => {
+const handleImageChange = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  if (file.size > 2 * 1024 * 1024) {
+  const MAX_SIZE = 2 * 1024 * 1024;
+
+  if (file.size > MAX_SIZE) {
     imageError.value = 'Image must be less than 2MB';
+    return;
+  }
+
+  const dimensions = await getImageDimensions(file);
+  if (dimensions.width > 800 || dimensions.height > 800) {
+    imageError.value = 'Image dimensions should be 800x800 pixels or less';
     return;
   }
 
@@ -75,6 +83,17 @@ const handleImageChange = (e) => {
     formData.value.imageURL = e.target.result;
   };
   reader.readAsDataURL(file);
+};
+
+const getImageDimensions = (file) => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      resolve({ width: img.width, height: img.height });
+    };
+    img.onerror = reject;
+    img.src = URL.createObjectURL(file);
+  });
 };
 
 const handleSubmit = () => {
