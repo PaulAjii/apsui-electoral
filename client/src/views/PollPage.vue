@@ -47,7 +47,9 @@
           <div class="candidate__info">
             <p class="info__field"><span class="label">Name: </span>{{ candidate.name }}</p>
             <p class="info__field"><span class="label">Alias: </span>{{ candidate.alias }}</p>
-            <p class="info__field"><span class="label">Level: </span>{{ candidate.user.level }}</p>
+            <p class="info__field" v-if="candidate.catchPhrase !== ''">
+              <span class="label">Catchphrase: </span>{{ candidate.catchPhrase }}
+            </p>
           </div>
         </div>
       </div>
@@ -206,7 +208,6 @@ const hasAnyVotes = computed(() => {
     (votes) => Array.isArray(votes) && votes.length > 0
   );
 });
-console.log(hasAnyVotes.value);
 
 const animateTransition = (direction) => {
   const container = pollContainer.value;
