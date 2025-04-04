@@ -70,11 +70,11 @@ const handleImageChange = async (e) => {
     return;
   }
 
-  const dimensions = await getImageDimensions(file);
-  if (dimensions.width > 800 || dimensions.height > 800) {
-    imageError.value = 'Image dimensions should be 800x800 pixels or less';
-    return;
-  }
+  // const dimensions = await getImageDimensions(file);
+  // if (dimensions.width > 800 || dimensions.height > 800) {
+  //   imageError.value = 'Image dimensions should be 800x800 pixels or less';
+  //   return;
+  // }
 
   imageError.value = '';
   const reader = new FileReader();
@@ -85,16 +85,16 @@ const handleImageChange = async (e) => {
   reader.readAsDataURL(file);
 };
 
-const getImageDimensions = (file) => {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      resolve({ width: img.width, height: img.height });
-    };
-    img.onerror = reject;
-    img.src = URL.createObjectURL(file);
-  });
-};
+// const getImageDimensions = (file) => {
+//   return new Promise((resolve, reject) => {
+//     const img = new Image();
+//     img.onload = () => {
+//       resolve({ width: img.width, height: img.height });
+//     };
+//     img.onerror = reject;
+//     img.src = URL.createObjectURL(file);
+//   });
+// };
 
 const handleSubmit = () => {
   emit('submit', formData.value);
