@@ -89,7 +89,7 @@ const candidateSchema = new mongoose.Schema(
 
 		catchPhrase: {
 			type: String,
-			default: '',
+			default: 'None',
 		},
 
 		votesCount: {
