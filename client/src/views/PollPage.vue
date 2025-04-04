@@ -25,7 +25,7 @@
 
     <div class="candidates__layout" v-if="currentPosition" :key="currentPosition">
       <p class="legend">
-        {{ currentCandidates.length > 1 ? `${currentPosition}s` : currentPosition }}
+        {{ currentPosition }}
       </p>
       <p class="total__candidates">Number of Candidates: {{ currentCandidates.length }}</p>
       <div class="candidates__inner-wrapper" ref="pollContainer">
@@ -310,7 +310,7 @@ onMounted(async () => {
 .candidates__layout {
   padding: 1rem;
   display: grid;
-  gap: 2rem;
+  gap: 0.25rem;
 }
 
 .legend {
@@ -357,7 +357,7 @@ onMounted(async () => {
   padding-top: 1rem;
   scroll-snap-align: start;
   max-width: 250px;
-  max-height: 250px;
+  max-height: 270px;
 }
 
 .navigation__controls {
@@ -440,9 +440,11 @@ onMounted(async () => {
 
   .candidates__layout {
     padding: 0 1rem 2rem;
+    gap: 2rem;
   }
 
   .legend {
+    margin-top: 1rem;
     font-size: 1.1rem;
   }
 
@@ -479,7 +481,7 @@ onMounted(async () => {
 
   .candidates__inner-wrapper {
     height: 350px;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   .candidate {

@@ -193,18 +193,17 @@ button {
 }
 
 .candidate__info > .info__field {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 .candidate__info > .info__field > .label {
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 1px;
 }
 
 .total__candidates {
   font-size: 0.9rem;
   font-weight: 600;
-  margin-block: 1rem;
 }
 
 .nav__container {
@@ -286,6 +285,5 @@ button {
   .total__candidates {
     font-size: 1.1rem;
     font-weight: 700;
-    margin-block: 2rem;
   }
 }
