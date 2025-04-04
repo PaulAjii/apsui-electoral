@@ -300,6 +300,7 @@ onMounted(async () => {
   background-clip: text;
   --webkit-background-clip: text;
   --moz-background-clip: text;
+  font-size: 1.2rem;
 }
 
 .votes {
@@ -434,6 +435,10 @@ onMounted(async () => {
 }
 
 @media screen and (min-width: 700px) {
+  .section__title {
+    font-size: 1.8rem;
+  }
+
   .votes {
     font-size: 1.2rem;
   }
