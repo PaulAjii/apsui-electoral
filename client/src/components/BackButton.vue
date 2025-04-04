@@ -34,7 +34,7 @@ button {
   align-items: center;
   gap: 0.35rem;
   padding: 0.25rem 0.75rem;
-  font-size: 0.95rem;
+  font-size: 0.75rem;
   color: black;
   border: 1px solid black;
   border-radius: 20px;
@@ -44,5 +44,11 @@ button {
 button:hover {
   color: white;
   background-color: black;
+}
+
+@media screen and (min-width: 700px) {
+  button {
+    font-size: 0.95rem;
+  }
 }
 </style>
