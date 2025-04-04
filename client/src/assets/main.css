@@ -204,6 +204,7 @@ button {
 .total__candidates {
   font-size: 0.9rem;
   font-weight: 600;
+  margin-bottom: 0.5rem;
 }
 
 .nav__container {
@@ -219,7 +220,7 @@ button {
 }
 
 .nav__container > .menu > .nav__link {
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: rgb(52, 52, 248);
   cursor: pointer;
@@ -285,5 +286,6 @@ button {
   .total__candidates {
     font-size: 1.1rem;
     font-weight: 700;
+    margin-bottom: 1rem;
   }
 }
