@@ -453,7 +453,7 @@ onMounted(async () => {
     font-size: 1.1rem;
   }
 
-  .progress__pagination::after,
+  /* .progress__pagination::after,
   .progress__pagination::before {
     content: '';
     position: absolute;
@@ -472,7 +472,7 @@ onMounted(async () => {
   .progress__pagination::before {
     left: 50%;
     transform: translateX(80%);
-  }
+  } */
 
   .nav__btn {
     font-size: 1rem;
