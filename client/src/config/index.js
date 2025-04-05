@@ -3,7 +3,7 @@ export const config = {
     apiUrl: 'http://localhost:5000/api/v1'
   },
   production: {
-    apiUrl: 'https://api-apsui-electoral.onrender.com/api/v1/'
+    apiUrl: 'https://api-apsui-electoral.vercel.app/api/v1/'
   }
 };
 
