@@ -77,7 +77,7 @@
       </header>
 
       <div
-        class="stats__grid invisible"
+        class="invisible"
         v-if="voterStore.voter.role === 'voter' && voterStore.voter.hasVoted === false"
       >
         <div v-for="(stat, level) in voterStats" :key="level" class="stat__card">
