@@ -32,7 +32,7 @@ export const login = async (req, res) => {
 if (user.isFirstTimeLogin === true) {
   return res.status(StatusCodes.UNAUTHORIZED).json({
     status: "error",
-    message: "User not verified")
+    message: "User not verified"
 })
 }
 
