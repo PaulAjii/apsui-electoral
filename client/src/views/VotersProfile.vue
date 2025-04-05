@@ -76,7 +76,10 @@
         <h2>Voters' Statistics</h2>
       </header>
 
-      <div class="stats__grid">
+      <div
+        class="stats__grid"
+        v-if="voterStore.voter.role === 'voter' && voterStore.voter.hasVoted === false"
+      >
         <div v-for="(stat, level) in voterStats" :key="level" class="stat__card">
           <h3>{{ level }} level</h3>
           <div class="stat__info">
@@ -93,6 +96,32 @@
               <div
                 class="progress"
                 :style="{ width: `${(stat.verified / stat.total) * 100}%` }"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="stats__grid"
+        v-if="voterStore.voter.role === 'admin' || voterStore.voter.hasVoted === true"
+      >
+        <div v-for="(stat, level) in voterStats" :key="level" class="stat__card">
+          <h3>{{ level }} level</h3>
+          <div class="stat__info">
+            <p>
+              Verified Voters: <span>{{ stat.verified }}</span>
+            </p>
+            <p>
+              Voted Voters: <span>{{ stat.voted }}</span>
+            </p>
+            <p>
+              Remaining: <span>{{ stat.verified - stat.voted }}</span>
+            </p>
+            <div class="progress__bar">
+              <div
+                class="progress"
+                :style="{ width: `${(stat.voted / stat.verified) * 100}%` }"
               ></div>
             </div>
           </div>
@@ -121,11 +150,11 @@ const voterStats = computed(() => {
   const totalVoters = voterStore.voters;
 
   const stats = {
-    100: { total: 0, verified: 0 },
-    200: { total: 0, verified: 0 },
-    300: { total: 0, verified: 0 },
-    400: { total: 0, verified: 0 },
-    500: { total: 0, verified: 0 }
+    100: { total: 0, verified: 0, voted: 0 },
+    200: { total: 0, verified: 0, voted: 0 },
+    300: { total: 0, verified: 0, voted: 0 },
+    400: { total: 0, verified: 0, voted: 0 },
+    500: { total: 0, verified: 0, voted: 0 }
   };
 
   totalVoters.forEach((voter) => {
@@ -136,6 +165,10 @@ const voterStats = computed(() => {
 
       if (!voter.isFirstTimeLogin) {
         stats[level].verified++;
+      }
+
+      if (voter.hasVoted) {
+        stats[level].voted++;
       }
     }
   });

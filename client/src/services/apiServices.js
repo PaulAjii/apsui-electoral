@@ -138,7 +138,7 @@ export const castVote = async (votes, store) => {
   try {
     const { data } = await authenticatedClient.post('/vote/cast', votes);
 
-    console.log(data);
+    // console.log(data);
 
     store.setVoter(data.voter);
 
