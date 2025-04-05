@@ -28,7 +28,7 @@
           class="cta__btn"
           @click="router.push('/auth/login')"
         >
-          Verify Voter
+          Login
           <v-icon name="bi-arrow-up-right" animation="float" />
         </button>
 
