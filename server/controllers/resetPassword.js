@@ -17,10 +17,12 @@ export const resetPassword = async (req, res) => {
 		user.password = newPassword;
 		user.isFirstTimeLogin = false;
 		await user.save();
+		const { password, ...userData } = user.toObject(); 
 
 		res.status(StatusCodes.OK).json({
 			status: 'success',
-			message: 'Passowrd updated successfuly',
+			message: 'Password updated successfully',
+			user: userData,
 		});
 	} catch (err) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

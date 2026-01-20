@@ -116,7 +116,13 @@ export const loginUser = async (userData, store) => {
   try {
     const { data } = await apiClient.post('/login', userData);
 
-    if (!data.user.isFirstTimeLogin) { store.setVoter(data.user); }
+    if (data.user.isFirstTimeLogin) { 
+      store.setVoter({
+        studentId: data.user.studentId
+    }) 
+    } else {
+      store.setVoter(data.user);
+    }
 
     return data;
   } catch (err) {
@@ -124,7 +130,7 @@ export const loginUser = async (userData, store) => {
   }
 };
 
-export const resetPassword = async (userData) => {
+export const resetPassword = async (userData, store) => {
   try {
     const { data } = await authenticatedClient.post('/password-reset', userData);
 

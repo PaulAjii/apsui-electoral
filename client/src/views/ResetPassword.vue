@@ -44,7 +44,7 @@ const handleSubmit = async () => {
     const response = await resetPassword({
       studentId: voter.studentId,
       newPassword: newPassword.value
-    });
+    }, voterStore);
 
     if (response.status === 'success') {
       toast.success(response.message);
