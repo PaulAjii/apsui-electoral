@@ -9,9 +9,9 @@ import { useRouter } from 'vue-router';
 const store = useVotersStore();
 const router = useRouter();
 
-const handleLogout = () => {
-  store.logout();
+const handleLogout = async () => {
   router.push('/auth/login');
+  store.logout();
 };
 </script>
 

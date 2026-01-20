@@ -77,7 +77,7 @@
       </header>
 
       <div
-        class="invisible"
+        class="stats__grid"
         v-if="voterStore.voter.role === 'voter' && voterStore.voter.hasVoted === false"
       >
         <div v-for="(stat, level) in voterStats" :key="level" class="stat__card">
@@ -103,7 +103,7 @@
       </div>
 
       <div
-        class="stats__grid"
+        class="invisible"
       >
         <div v-for="(stat, level) in voterStats" :key="level" class="stat__card">
           <h3>{{ level }} level</h3>

@@ -4,6 +4,7 @@ import Users from './models/Users.js';
 import connectDB from './config/conn.js';
 import dotenv from 'dotenv';
 import capitalize from './utils/capitalize.js';
+import data from './db/data.json' with { type: 'json' };
 
 dotenv.config();
 
@@ -16,27 +17,31 @@ const populateDB = async () => {
 	try {
 		await connectDB(process.env.DB_URI);
 
-		// Fetch Data
-		const { data } = await axios.get(process.env.API_ENDPOINT);
-		const users = data.data;
+		const uniqueUsersMap = new Map(data.map(user => [user.studentId, user]));
+		const uniqueUsers = Array.from(uniqueUsersMap.values());
+
+		console.log(`Processing ${uniqueUsers.length} unique users...`);
 
 		const transformedUserData = await Promise.all(
-			users.map(async (user) => ({
-				studentId: user.matricNumber,
-				name: `${capitalize(user.firstName)} ${capitalize(
-					user.lastName
-				)}`,
-				password: await hashPassword(user.matricNumber),
+			uniqueUsers.map(async (user) => ({
+				studentId: user.studentId,
+				name: `${capitalize(user.firstName)} ${capitalize(user.lastName)}`,
+				password: await hashPassword(user.studentId),
 				level: user.level,
-				set: user.classSet,
+				set: user.set,
+				role: user.role || 'voter'
 			}))
 		);
 
 		await Users.deleteMany({});
 
-		await Users.insertMany(transformedUserData);
+		try {
+			await Users.insertMany(transformedUserData, { ordered: false });
+			console.log('Database populated successfully!');
+		} catch (insertError) {
+			console.log(`Finished with some errors: ${insertError.insertedDocs.length} documents inserted.`);
+		}
 
-		console.log('Database populated successfully!');
 		process.exit(0);
 	} catch (err) {
 		console.error(err);
