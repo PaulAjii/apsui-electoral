@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "axios": "^1.7.9",
+    "dokugen": "^3.9.0",
     "gsap": "^3.12.5",
     "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^2.2.6",
