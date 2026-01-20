@@ -78,7 +78,7 @@
 
       <div
         class="stats__grid"
-        v-if="voterStore.voter.role === 'voter' && voterStore.voter.hasVoted === false"
+        v-if="voterStore.voter.hasVoted === false || voterStore.voter.role === 'admin'"
       >
         <div v-for="(stat, level) in voterStats" :key="level" class="stat__card">
           <h3>{{ level }} level</h3>

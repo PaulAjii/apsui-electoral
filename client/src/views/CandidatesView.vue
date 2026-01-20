@@ -59,7 +59,7 @@
     <div v-else class="not__found">No Candidate found</div>
 
     <AddCandidate
-      v-if="showModal"
+      v-if="showModal === true"
       @close="showModal = false"
       @submit="handleAddCandidate"
       :loading="loading"

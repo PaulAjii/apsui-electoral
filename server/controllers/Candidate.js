@@ -10,12 +10,13 @@ import { Readable } from "stream";
 
 export const getAllCandidates = asyncHandler(async (req, res) => {
   try {
-    const candidates = await Candidate.find().populate("user").orFail().exec();
+    const candidates = await Candidate.find().populate("user").exec();
 
     if (!candidates) {
-      return res.status(StatusCodes.NOT_FOUND).json({
-        status: "error",
+      return res.status(StatusCodes.OK).json({
+        status: "success",
         message: "No candidate found!",
+        candidates
       });
     }
     res.status(StatusCodes.OK).json({

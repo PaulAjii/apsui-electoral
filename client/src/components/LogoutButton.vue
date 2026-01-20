@@ -10,7 +10,7 @@ const store = useVotersStore();
 const router = useRouter();
 
 const handleLogout = async () => {
-  router.push('/auth/login');
+  await router.push('/auth/login');
   store.logout();
 };
 </script>

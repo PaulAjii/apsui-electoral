@@ -95,7 +95,8 @@
         "firstName": "Oluwajomiloju",
         "lastName": "Akintola",
         "set": "2k28",
-        "level": 100
+        "level": 100,
+        "role": "admin"
     },
     {
         "studentId": "248750",
@@ -543,7 +544,8 @@
         "firstName": "Dominion",
         "lastName": "Salami",
         "set": "2k26",
-        "level": 200
+        "level": 200,
+        "role": "admin"
     },
     {
         "studentId": "242058",
@@ -697,7 +699,8 @@
         "firstName": "Omolara",
         "lastName": "Matthew",
         "set": "2k25",
-        "level": 300
+        "level": 300,
+        "role": "admin"
     },
     {
         "studentId": "235394",
@@ -907,7 +910,8 @@
         "firstName": "Victory",
         "lastName": "Adeniyi",
         "set": "2k24",
-        "level": 400
+        "level": 400,
+        "role": "admin"
     },
     {
         "studentId": "235386",
@@ -1426,6 +1430,7 @@
         "firstName": "Segun",
         "lastName": "Sholanke",
         "set": "2k23",
-        "level": 500
+        "level": 500,
+        "role": "admin"
     }
 ]

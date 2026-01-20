@@ -1,10 +1,10 @@
-import axios from 'axios';
 import bcrypt from 'bcrypt';
 import Users from './models/Users.js';
 import connectDB from './config/conn.js';
 import dotenv from 'dotenv';
 import capitalize from './utils/capitalize.js';
 import data from './db/data.json' with { type: 'json' };
+import Candidates from './models/Candidate.js';
 
 dotenv.config();
 
@@ -34,6 +34,7 @@ const populateDB = async () => {
 		);
 
 		await Users.deleteMany({});
+		await Candidates.deleteMany({});
 
 		try {
 			await Users.insertMany(transformedUserData, { ordered: false });
