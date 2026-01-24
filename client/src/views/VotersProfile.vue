@@ -41,6 +41,14 @@
       >
         Voters
       </button>
+
+      <button
+        type="button"
+        @click="router.push('/results')"
+        v-if="voterStore.voter.role === 'admin'"
+      >
+        Results
+      </button>
       </div>
     </header>
 
