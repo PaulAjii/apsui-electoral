@@ -8,7 +8,8 @@
     <header class="profile__header">
       <h2>Voter's Details</h2>
 
-      <button
+      <div class="action__btns">
+        <button
         type="button"
         v-if="voterStore.voter.role === 'admin'"
         @click="router.push('/candidates')"
@@ -32,6 +33,15 @@
       >
         Home
       </button>
+
+      <button
+        type="button"
+        @click="router.push('/voters')"
+        v-if="voterStore.voter.role === 'admin'"
+      >
+        Voters
+      </button>
+      </div>
     </header>
 
     <form>
@@ -188,6 +198,10 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.action__btns {
+  display: flex;
+  gap: 1rem;
+}
 .btns {
   display: flex;
   align-items: center;
@@ -213,7 +227,7 @@ onMounted(async () => {
   font-weight: 500;
 }
 
-.profile__header > button {
+.action__btns > button {
   background-color: rgb(37, 37, 238);
   color: var(--neutral);
   padding: 0.25rem 1rem;
