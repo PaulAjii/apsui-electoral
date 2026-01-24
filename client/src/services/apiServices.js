@@ -155,3 +155,13 @@ export const castVote = async (votes, store) => {
     throw errorHandler(err);
   }
 };
+
+export const getVoteResults = async () => {
+  try {
+    const { data } = await authenticatedClient.get('/vote/results');
+
+    return data;
+  } catch (err) {
+    throw errorHandler(err);
+  }
+};
