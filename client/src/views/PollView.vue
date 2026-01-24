@@ -7,6 +7,7 @@
         <RouterLink to="/" class="nav__link">Home</RouterLink>
         <RouterLink to="/candidates" class="nav__link">Candidates</RouterLink>
         <p class="nav__link active">Poll</p>
+        <RouterLink to="/results" class="nav__link">Results</RouterLink>
       </div>
     </nav>
 
