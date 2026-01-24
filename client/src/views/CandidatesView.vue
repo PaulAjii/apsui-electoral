@@ -6,7 +6,8 @@
       <div class="menu">
         <RouterLink to="/" class="nav__link">Home</RouterLink>
         <p class="nav__link active">Candidates</p>
-        <!-- <RouterLink to="/polls" class="nav__link">Poll</RouterLink> -->
+        <RouterLink to="/voters" class="nav__link">Voters</RouterLink>
+        <RouterLink to="/voters/profile" class="nav__link">Profile</RouterLink>
       </div>
     </nav>
     <header class="candidate__header">
