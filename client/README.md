@@ -1,7 +1,7 @@
 # APSUI Vote 🗳️
 
 ## Overview
-APSUI Vote is a robust, secure, and modern digital electoral platform designed for the Association of Pharmaceutical Students. Built with Vue 3 and the Composition API, the system provides a seamless experience for voters to cast ballots, administrators to manage candidates, and the community to track election results in real-time with high transparency.
+APSUI Vote is a robust, secure, and modern digital electoral platform designed for the Association of Physiotherapy Students. Built with Vue 3 and the Composition API, the system provides a seamless experience for voters to cast ballots, administrators to manage candidates, and the community to track election results in real-time with high transparency.
 
 ## Features
 *   **Secure Authentication:** JWT-based login system with mandatory first-time password resets for enhanced security.
