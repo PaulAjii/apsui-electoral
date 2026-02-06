@@ -6,7 +6,7 @@
         <div class="form__container">
           <div class="form__group">
             <label for="name">Name</label>
-            <input type="text" id="name" v-model="formData.name" placeholder="John Doe" required />
+            <input type="text" id="name" v-model.trim="formData.name" placeholder="John Doe" required />
           </div>
 
           <div class="form__group">
@@ -14,7 +14,7 @@
             <input
               type="text"
               id="studentID"
-              v-model="formData.studentId"
+              v-model.trim="formData.studentId"
               placeholder="234612"
               required
             />
@@ -22,7 +22,7 @@
 
           <div class="form__group">
             <label for="alias">Alias</label>
-            <input type="text" id="alias" v-model="formData.alias" placeholder="johnny" />
+            <input type="text" id="alias" v-model.trim="formData.alias" placeholder="johnny" />
           </div>
 
           <div class="form__group">
@@ -30,7 +30,7 @@
             <input
               type="text"
               id="position"
-              v-model="formData.position"
+              v-model.trim="formData.position"
               placeholder="Social Director"
               required
             />
@@ -60,7 +60,7 @@
             <label for="catchPhrase">Catchphrase</label>
             <textarea
               id="catchPhrase"
-              v-model="formData.catchPhrase"
+              v-model.trim="formData.catchPhrase"
               placeholder="lorem ipsum..."
             ></textarea>
           </div>
