@@ -123,17 +123,17 @@ export const updateUser = async (req, res) => {
 
 export const findUserByMatric = async (req, res) => {
 	try {
-		const { role } = req.query;
-		if (!role) {
+		const { matricNumber } = req.params;
+		if (!matricNumber) {
 			return res.status(StatusCodes.BAD_REQUEST).json({
 				status: 'error',
 				message: 'Matric number is required',
 			});
 		}
 
-		const user = await User.find({ role }).select('-password');
+		const user = await User.find({ studentId: matricNumber }).select('-password');
 
-		if (!user) {
+		if (!user || user.length === 0) {
 			return res.status(StatusCodes.NOT_FOUND).json({
 				status: 'error',
 				message: 'User not found',
@@ -142,7 +142,8 @@ export const findUserByMatric = async (req, res) => {
 
 		res.status(StatusCodes.OK).json({
 			status: 'success',
-			user,
+			user: user[0],
+
 		});
 	} catch (err) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

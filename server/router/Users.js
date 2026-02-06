@@ -11,7 +11,7 @@ import {
 const router = Router();
 
 router.route("/users").post(createUser).get(getUsers);
-router.route("/users/role").get(findUserByMatric);
+router.route("/users/find/:matricNumber").get(findUserByMatric);
 router.route("/users/:id").get(getUser).patch(updateUser);
 
 export default router;
