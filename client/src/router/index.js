@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import { useVotersStore } from '@/store/voters';
+import { clearToken, getToken } from '@/services/tokenService';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,12 +52,13 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token');
+  const token = getToken();
   const store = useVotersStore();
-  const protectedRoutes = ['/voters/profile', '/polls', '/candidates'];
+  const protectedRoutes = ['/voters/profile', '/polls', '/candidates', '/reset-password', '/voters', '/results'];
 
   if (protectedRoutes.includes(to.path) && !token) {
-    next('/');
+    clearToken();
+    next('/auth/login');
     return;
   }
   if (to.path === '/polls' && store.voter?.hasVoted) {

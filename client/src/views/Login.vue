@@ -34,6 +34,7 @@ import { loginUser } from '../services/apiServices.js';
 import { useToast } from 'vue-toastification';
 import { useRouter } from 'vue-router';
 import { useVotersStore } from '../store/voters.js';
+import { setToken } from '@/services/tokenService';
 
 const formData = ref({
   studentId: '',
@@ -53,7 +54,7 @@ const handleSubmit = async () => {
     const response = await loginUser(formData.value, voterStore);
 
     if (response.status === 'success') {
-      localStorage.setItem('token', response.token);
+      setToken(response.token);
       toast.success('Login successful');
 
       if (response.user.isFirstTimeLogin) {

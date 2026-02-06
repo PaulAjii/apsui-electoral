@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { errorHandler } from '@/utils';
 import { getApiUrl } from '@/config';
+import { getToken, clearToken } from './tokenService';
 
 const apiClient = axios.create({
   baseURL: getApiUrl(),
@@ -18,13 +19,28 @@ const authenticatedClient = axios.create({
 
 authenticatedClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const token = getToken();
+
+    if (!token) {
+      clearToken();
+      window.location.href = '/auth/login';
+      return Promise.reject(new Error("Token expired, please log in again."));
     }
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error)
+);
+
+authenticatedClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      clearToken();
+      window.location.href = '/auth/login';
+    }
+    return Promise.reject(error);
+  }
 );
 
 export const getCandidates = async (store) => {
