@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1', candidateRouter);
 app.use('/api/v1', authRouter);
-app.use('/api/v1/vote', voteRouter);
+app.use('/api/v1/vote', authenticateUser, voteRouter);
 app.use('/api/v1', authenticateUser, userRouter);
 app.use('/api/v1', authenticateUser, resetPasswordRouter);
 
