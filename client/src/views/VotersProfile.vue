@@ -121,7 +121,7 @@
       </div>
 
       <div
-        class="invisible"
+        :class="voterStore.voter.hasVoted === false ? 'invisible' : 'stats__grid'" 
       >
         <div v-for="(stat, level) in voterStats" :key="level" class="stat__card">
           <h3>{{ level }} level</h3>
