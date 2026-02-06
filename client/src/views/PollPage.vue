@@ -88,7 +88,7 @@
         v-if="
           (currentIndex === Object.keys(groupedCandidates).length - 1 &&
             voterStore.voter.hasVoted === false) ||
-          voterStore.voter.role !== 'voter'
+          voterStore.voter.role !== 'admin'
         "
         class="nav__btn submit"
         @click="submitVotes"

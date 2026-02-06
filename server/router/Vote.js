@@ -5,7 +5,7 @@ import { authenticateUser } from '../middlewares/auth.js';
 
 const router = Router();
 
-router.post('/cast', authenticateUser, isAdmin, castVote);
-router.route('/results').get(getResults);
+router.post('/cast', castVote);
+router.get('/results', isAdmin, getResults);
 
 export default router;
