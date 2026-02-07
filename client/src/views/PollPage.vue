@@ -328,7 +328,7 @@ const confirmSubmission = async () => {
 
     setTimeout(() => {
       router.push('/voters/profile');
-    }, 3000);
+    }, 1000);
   }
 };
 
