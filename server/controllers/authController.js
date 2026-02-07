@@ -21,12 +21,12 @@ export const login = async (req, res) => {
 			});
 		}
 
-		// if (user.isFirstTimeLogin === true) {
-		//   return res.status(StatusCodes.UNAUTHORIZED).json({
-		//     status: "error",
-		//     message: "User not verified"
-		// })
-		// }
+		if (user.isFirstTimeLogin === true) {
+		  return res.status(StatusCodes.UNAUTHORIZED).json({
+		   status: "error",
+	    message: "User not verified"
+		})
+	}
 
 		const isPasswordMatch = await user.comparePassword(password);
 		if (!isPasswordMatch) {
