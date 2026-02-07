@@ -9,6 +9,7 @@ export const setToken = (token) => {
 export const clearToken = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("tokenExpiry");
+    localStorage.removeItem("hasSeenInstructions");
 };
 
 export const getToken = () => {
