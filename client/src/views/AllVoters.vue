@@ -5,8 +5,8 @@
 
       <div class="menu">
         <RouterLink to="/" class="nav__link">Home</RouterLink>
-        <p class="nav__link active">Voters</p>
         <RouterLink to="/candidates" class="nav__link">Candidates</RouterLink>
+        <p class="nav__link active">Voters</p>
         <RouterLink to="/results" class="nav__link">Results</RouterLink>
         <RouterLink to="/voters/profile" class="nav__link">Profile</RouterLink>
       </div>
