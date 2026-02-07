@@ -275,6 +275,11 @@ onMounted(async () => {
 }
 
 .nav__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
   position: sticky;
   top: 0;
   background: white;
@@ -284,15 +289,15 @@ onMounted(async () => {
 }
 
 .results__header {
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid rgb(236, 236, 236);
-  padding-bottom: 1rem;
-  margin-bottom: 1.5rem;
-  position: relative;
+  position: sticky;
+  top: 75px;
   background: white;
-  z-index: 20;
+  z-index: 18;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgb(236, 236, 236);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s;
 }
 
 .section__title {
@@ -322,14 +327,14 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding-bottom: 3rem;
+  padding-bottom: 7rem;
 }
 
 .position__card {
   background: white;
   border: 1px solid rgb(236, 236, 236);
   border-radius: 0.75rem;
-  padding: 1.5rem;
+  padding: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease;
 }
@@ -434,7 +439,7 @@ onMounted(async () => {
 
 .progress__bar {
   flex: 1;
-  height: 24px;
+  height: 5px;
   background: rgb(240, 240, 240);
   border-radius: 12px;
   overflow: hidden;
@@ -533,6 +538,7 @@ onMounted(async () => {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    top: 35px;
   }
 
   .section__title {
