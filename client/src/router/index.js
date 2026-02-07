@@ -68,13 +68,11 @@ router.beforeEach((to, from, next) => {
     return;
   }
 
-  // Redirect to instructions if trying to access polls and haven't read instructions
-  if (to.path === '/polls' && !localStorage.getItem('instructionsRead')) {
+  if (to.path === '/polls' && !store.voter?.hasVoted) {
     next('/instructions');
     return;
   }
 
-  // Redirect to profile if already voted and trying to access polls or instructions
   if ((to.path === '/polls' || to.path === '/instructions') && store.voter?.hasVoted) {
     next('/voters/profile');
     return;
