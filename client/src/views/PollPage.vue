@@ -90,7 +90,7 @@
             voterStore.voter.hasVoted === false) ||
           voterStore.voter.role !== 'admin'
         "
-        class="nav__btn submit"
+        class="nav__btn submit invisible"
         @click="submitVotes"
         :disabled="loading || !hasAnyVotes || voterStore.voter.hasVoted"
       >
