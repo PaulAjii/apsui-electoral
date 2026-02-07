@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import { clearToken } from '@/services/tokenService';
 
 export const useVotersStore = defineStore('voters', () => {
   const voter = ref(JSON.parse(localStorage.getItem('voterDetails')) || null);
@@ -18,7 +19,7 @@ export const useVotersStore = defineStore('voters', () => {
 
   const logout = () => {
     localStorage.removeItem('voterDetails');
-    localStorage.removeItem('token');
+    clearToken();
     voter.value = null;
   };
 
