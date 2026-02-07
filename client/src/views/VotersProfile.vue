@@ -9,6 +9,13 @@
       <h2>Voter's Details</h2>
 
       <div class="action__btns">
+         <button
+        type="button"
+        @click="router.push('/')"
+      >
+        Home
+      </button>
+
         <button
         type="button"
         v-if="voterStore.voter.role === 'admin'"
@@ -24,14 +31,6 @@
         @click="router.push('/polls')"
       >
         Polls
-      </button>
-
-      <button
-        type="button"
-        v-if="voterStore.voter.role === 'voter' && voterStore.voter.hasVoted === false"
-        @click="router.push('/')"
-      >
-        Home
       </button>
 
       <button
@@ -121,7 +120,7 @@
       </div>
 
       <div
-        :class="voterStore.voter.hasVoted === false ? 'invisible' : 'stats__grid'" 
+        :class="voterStore.voter.hasVoted === false || voterStore.voter.role === 'admin' ? 'invisible' : 'stats__grid'" 
       >
         <div v-for="(stat, level) in voterStats" :key="level" class="stat__card">
           <h3>{{ level }} level</h3>
@@ -226,6 +225,7 @@ onMounted(async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   padding-block: 0.25rem;
 }
 
