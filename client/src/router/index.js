@@ -19,6 +19,12 @@ const router = createRouter({
     },
 
     {
+      path: '/instructions',
+      name: 'instructions',
+      component: () => import('../views/InstructionsPage.vue')
+    },
+
+    {
       path: '/candidates',
       name: 'candidates',
       component: () => import('../views/CandidatesView.vue')
@@ -54,14 +60,22 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const token = getToken();
   const store = useVotersStore();
-  const protectedRoutes = ['/voters/profile', '/polls', '/candidates', '/reset-password', '/voters', '/results'];
+  const protectedRoutes = ['/voters/profile', '/polls', '/instructions', '/candidates', '/reset-password', '/voters', '/results'];
 
   if (protectedRoutes.includes(to.path) && !token) {
     clearToken();
     next('/auth/login');
     return;
   }
-  if (to.path === '/polls' && store.voter?.hasVoted) {
+
+  // Redirect to instructions if trying to access polls and haven't read instructions
+  if (to.path === '/polls' && !localStorage.getItem('instructionsRead')) {
+    next('/instructions');
+    return;
+  }
+
+  // Redirect to profile if already voted and trying to access polls or instructions
+  if ((to.path === '/polls' || to.path === '/instructions') && store.voter?.hasVoted) {
     next('/voters/profile');
     return;
   }
