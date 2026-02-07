@@ -64,7 +64,7 @@
     </div>
 
     <div class="instructions__footer">
-      <button class="proceed__btn" @click="router.push('/polls')">
+      <button class="proceed__btn" @click="proceedToPolls">
         I Understand, Let's Vote!
       </button>
     </div>
@@ -77,6 +77,11 @@ import BackButton from '@/components/BackButton.vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
+const proceedToPolls = () => {
+  localStorage.setItem('hasSeenInstructions', true);
+  router.push('/polls');
+}
 </script>
 
 <style scoped>
