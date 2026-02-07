@@ -208,7 +208,8 @@ onMounted(async () => {
 <style scoped>
 .action__btns {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 .btns {
   display: flex;
@@ -238,12 +239,13 @@ onMounted(async () => {
 .action__btns > button {
   background-color: rgb(37, 37, 238);
   color: var(--neutral);
-  padding: 0.25rem 1rem;
+  padding: 0.35rem 0.75rem;
   border-radius: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   font-weight: 500;
   border: 2px solid rgb(37, 37, 238);
   transition: all 0.5s ease;
+  white-space: nowrap;
 }
 
 .profile__header > button:hover {
@@ -402,6 +404,15 @@ onMounted(async () => {
 
   .profile__header > button {
     font-size: 1rem;
+  }
+
+  .action__btns {
+    gap: 1rem;
+  }
+
+  .action__btns > button {
+    padding: 0.35rem 1rem;
+    font-size: 0.9rem;
   }
 
   .profile__details {
