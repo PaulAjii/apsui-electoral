@@ -210,8 +210,10 @@ button {
 .nav__container {
   display: flex;
   justify-content: space-between;
+  gap: 0.5rem;
   align-items: center;
-  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: .5rem;
 }
 
 .nav__container > .menu {
