@@ -68,8 +68,9 @@ router.beforeEach((to, from, next) => {
     return;
   }
 
-  if (to.path === '/polls' && localStorage.getItem('hasSeenInstructions') !== 'true') {
-    next('/instructions');
+  if (to.path === '/polls' || localStorage.getItem('hasSeenInstructions') !== 'true') {
+    //next('/instructions');
+    next('/voters/profile')
     return;
   }
 
