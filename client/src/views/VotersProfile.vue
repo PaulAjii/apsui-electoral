@@ -26,7 +26,6 @@
 
       <button
         type="button"
-        class="invisible"
         v-if="voterStore.voter.role === 'voter' && voterStore.voter.hasVoted === false"
         @click="router.push('/polls')"
       >
