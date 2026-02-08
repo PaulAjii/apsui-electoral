@@ -327,7 +327,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding-bottom: 7rem;
+  padding-bottom: 12rem;
 }
 
 .position__card {
