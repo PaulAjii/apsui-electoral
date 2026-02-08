@@ -1,5 +1,8 @@
 <template>
-  <SectionLayout customClass="candidates__section" sectionWrapper="candidates__wrapper">
+  <SectionLayout
+    customClass="candidates__section"
+    sectionWrapper="candidates__wrapper"
+  >
     <nav class="nav__container">
       <BackButton />
 
@@ -23,96 +26,127 @@
       </p>
     </header>
 
-    <div class="candidates__layout" v-if="currentPosition" :key="currentPosition">
-      <p class="legend">
-        {{ currentPosition }}
-      </p>
-      <p class="total__candidates">Number of Candidates: {{ currentCandidates.length }}</p>
-      <div class="candidates__inner-wrapper" ref="pollContainer">
-        <div
-          v-for="candidate in currentCandidates"
-          :key="candidate._id"
-          :class="[
-            'candidate',
-            {
-              selected: selectedVotes[currentPosition]?.includes(candidate._id)
-            }
-          ]"
-          @click="selectCandidate(candidate._id)"
-        >
-          <div class="candidate__img">
-            <img :src="candidate.imageURL" :alt="candidate.alias" />
-          </div>
+    <div class="poll__main-content">
+      <div
+        class="candidates__layout"
+        v-if="currentPosition"
+        :key="currentPosition"
+      >
+        <div class="sticky__stats">
+          <p class="legend">
+            {{ currentPosition }}
+          </p>
+          <p class="total__candidates">
+            Number of Candidates: {{ currentCandidates.length }}
+          </p>
+        </div>
 
-          <div class="candidate__info">
-            <p class="info__field"><span class="label">Name: </span>{{ candidate.name }}</p>
-            <p class="info__field"><span class="label">Alias: </span>{{ candidate.alias }}</p>
-            <p class="info__field" v-if="candidate.catchPhrase !== ''">
-              <span class="label">Catchphrase: </span>{{ candidate.catchPhrase }}
-            </p>
+        <div class="candidates__inner-wrapper" ref="pollContainer">
+          <div
+            v-for="candidate in currentCandidates"
+            :key="candidate._id"
+            :class="[
+              'candidate',
+              {
+                selected: selectedVotes[currentPosition]?.includes(
+                  candidate._id
+                ),
+              },
+            ]"
+            @click="selectCandidate(candidate._id)"
+          >
+            <div class="candidate__img">
+              <img :src="candidate.imageURL" :alt="candidate.alias" />
+            </div>
+
+            <div class="candidate__info">
+              <p class="info__field">
+                <span class="label">Name: </span>{{ candidate.name }}
+              </p>
+              <p class="info__field">
+                <span class="label">Alias: </span>{{ candidate.alias }}
+              </p>
+              <p class="info__field" v-if="candidate.catchPhrase !== ''">
+                <span class="label">Catchphrase: </span>{{ candidate.catchPhrase }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="navigation__controls" v-if="currentPosition">
-      <div class="navigation__control-btns">
-        <button class="nav__btn prev" @click="prevPosition" :disabled="currentIndex === 0">
-          Previous
-        </button>
-
-        <!-- Progress Indicators -->
-        <div class="progress__pagination">
+      <div class="navigation__controls" v-if="currentPosition">
+        <div class="navigation__control-btns">
           <button
-            v-for="(position, index) in Object.keys(groupedCandidates)"
-            :key="index"
-            :class="[
-              'progress__nums',
-              {
-                active: currentIndex === index,
-                completed: votedPositions[position]
-              }
-            ]"
-            @click="navigateToPosition(index)"
+            class="nav__btn prev"
+            @click="prevPosition"
+            :disabled="currentIndex === 0"
           >
-            {{ index + 1 }}
+            Previous
+          </button>
+
+          <div class="progress__pagination">
+            <button
+              v-for="(position, index) in Object.keys(groupedCandidates)"
+              :key="index"
+              :class="[
+                'progress__nums',
+                {
+                  active: currentIndex === index,
+                  completed: votedPositions[position],
+                },
+              ]"
+              @click="navigateToPosition(index)"
+            >
+              {{ index + 1 }}
+            </button>
+          </div>
+
+          <button class="nav__btn skip" @click="nextPosition">
+            {{ hasSelection ? 'Continue' : 'Skip' }}
           </button>
         </div>
 
-        <button class="nav__btn skip" @click="nextPosition">
-          {{ hasSelection ? 'Continue' : 'Skip' }}
+        <button
+          v-if="
+            (currentIndex === Object.keys(groupedCandidates).length - 1 &&
+              voterStore.voter.hasVoted === false) ||
+            voterStore.voter.role !== 'admin'
+          "
+          class="nav__btn submit"
+          @click="submitVotes"
+          :disabled="loading || !hasAnyVotes || voterStore.voter.hasVoted"
+        >
+          {{ loading ? 'Submitting...' : 'Submit Votes' }}
         </button>
       </div>
-
-      <button
-        v-if="
-          (currentIndex === Object.keys(groupedCandidates).length - 1 &&
-            voterStore.voter.hasVoted === false) ||
-          voterStore.voter.role !== 'admin'
-        "
-        class="nav__btn submit"
-        @click="submitVotes"
-        :disabled="loading || !hasAnyVotes || voterStore.voter.hasVoted"
-      >
-        {{ loading ? 'Submitting...' : 'Submit Votes' }}
-      </button>
     </div>
   </SectionLayout>
 
-  <!-- Confirmation Modal -->
   <div v-if="showConfirmation" class="confirmation__overlay">
     <div class="confirmation__modal">
       <h3 class="confirmation__title">Confirm Your Votes</h3>
       <p class="confirmation__message">
-        You have selected candidates for {{ Object.keys(selectedVotes).length }} position(s). Please review your selections carefully.
+        You have selected candidates for
+        {{ Object.keys(selectedVotes).length }} position(s). Please review your
+        selections carefully.
       </p>
-      <p class="confirmation__warning">⚠️ Once submitted, you cannot vote again!</p>
-      
+      <p class="confirmation__warning">
+        ⚠️ Once submitted, you cannot vote again!
+      </p>
+
       <div class="confirmation__actions">
-        <button class="btn cancel__btn" @click="cancelSubmission" :disabled="loading">
+        <button
+          class="btn cancel__btn"
+          @click="cancelSubmission"
+          :disabled="loading"
+        >
           Cancel
         </button>
-        <button class="btn confirm__btn" @click="confirmSubmission" :disabled="loading">
+        <button
+          class="btn confirm__btn"
+          @click="confirmSubmission"
+          :disabled="loading"
+        >
           {{ loading ? 'Submitting...' : 'Confirm & Submit' }}
         </button>
       </div>
@@ -143,12 +177,12 @@ const positionOrder = {
   'Financial Secretary': 3,
   'Sports Secretary': 4,
   'Public Relations Officer': 5,
-  'Treasurer': 6,
+  Treasurer: 6,
   'Assistant General Secretary': 7,
   'General Secretary': 8,
   'Vice President': 9,
-  'President': 10,
-  'Senate': 11
+  President: 10,
+  Senate: 11,
 };
 
 const currentIndex = ref(0);
@@ -178,19 +212,21 @@ const groupedCandidates = computed(() => {
     return acc;
   }, {});
 
-  const filteredGroups = Object.entries(groups).reduce((acc, [position, candidates]) => {
-    if (candidates.length > 0) {
-      acc[position] = candidates;
-    }
-    return acc;
-  }, {});
+  const filteredGroups = Object.entries(groups).reduce(
+    (acc, [position, candidates]) => {
+      if (candidates.length > 0) {
+        acc[position] = candidates;
+      }
+      return acc;
+    },
+    {}
+  );
 
-  // Sort positions by positionOrder
   const sortedGroups = {};
   const sortedKeys = Object.keys(filteredGroups).sort(
     (a, b) => (positionOrder[a] || 999) - (positionOrder[b] || 999)
   );
-  
+
   sortedKeys.forEach((key) => {
     sortedGroups[key] = filteredGroups[key];
   });
@@ -233,9 +269,11 @@ const selectCandidate = (candidateId) => {
     const senateVotes = selectedVotes.value[position];
 
     if (senateVotes.includes(candidateId)) {
-      selectedVotes.value[position] = senateVotes.filter((id) => id !== candidateId);
-      votedPositions.value[position] = selectedVotes.value[position].length > 0;
-      // Delete the position if no votes left
+      selectedVotes.value[position] = senateVotes.filter(
+        (id) => id !== candidateId
+      );
+      votedPositions.value[position] =
+        selectedVotes.value[position].length > 0;
       if (selectedVotes.value[position].length === 0) {
         delete selectedVotes.value[position];
       }
@@ -247,13 +285,10 @@ const selectCandidate = (candidateId) => {
       return;
     }
   } else {
-    // For non-senate positions, allow toggle (select/deselect)
     if (selectedVotes.value[position]?.includes(candidateId)) {
-      // Deselect if already selected - remove the position from selectedVotes
       delete selectedVotes.value[position];
       votedPositions.value[position] = false;
     } else {
-      // Select the candidate
       selectedVotes.value[position] = [candidateId];
       votedPositions.value[position] = true;
     }
@@ -297,10 +332,13 @@ const navigateToPosition = (index) => {
 
 const formatVotes = () => {
   const formattedVotes = Object.entries(selectedVotes.value)
-    .filter(([_, candidateIds]) => Array.isArray(candidateIds) && candidateIds.length > 0)
+    .filter(
+      ([_, candidateIds]) =>
+        Array.isArray(candidateIds) && candidateIds.length > 0
+    )
     .map(([position, candidateIds]) => ({
       position,
-      candidateIds: Array.isArray(candidateIds) ? candidateIds : [candidateIds]
+      candidateIds: Array.isArray(candidateIds) ? candidateIds : [candidateIds],
     }));
 
   return { votes: formattedVotes };
@@ -346,7 +384,7 @@ onMounted(async () => {
       }
     }
   } catch (error) {
-    toast.err(error.message);
+    toast.error(error.message);
   } finally {
     loading.value = false;
   }
@@ -354,6 +392,45 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+/* Main Content vertical scroll wrapper */
+.poll__main-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  /* Calculated height to allow scrolling of middle content */
+  height: calc(100dvh - 220px);
+  padding-top: 0.25rem; /* Reduced top padding */
+  padding-bottom: 0.5rem; /* Reduced bottom padding */
+}
+
+/* Tiny Gray Scrollbar matching AllVoters style but thinner */
+.poll__main-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.poll__main-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.poll__main-content::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.poll__main-content::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* Sticky stats for fixed position info during scroll */
+.sticky__stats {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 5;
+  padding: 0.25rem 0.75rem; /* Reduced padding */
+  border-bottom: 1px solid transparent;
+}
+
 .candidate__header {
   display: flex;
   align-items: flex-end;
@@ -379,7 +456,7 @@ onMounted(async () => {
 }
 
 .candidates__layout {
-  padding: 0.75rem;
+  padding: 0.5rem 0.75rem; /* Reduced vertical padding */
   display: grid;
   gap: 0.25rem;
 }
@@ -389,15 +466,13 @@ onMounted(async () => {
   font-weight: 700;
   letter-spacing: 1px;
   text-align: left;
-  margin-bottom: 0.5rem;
-  padding-inline: 0.75rem;
+  margin-bottom: 0.25rem; /* Reduced */
 }
 
 .total__candidates {
   font-size: 0.75rem;
   color: rgb(120, 120, 120);
-  margin-bottom: 0.75rem;
-  padding-inline: 0.75rem;
+  margin-bottom: 0.5rem; /* Reduced */
 }
 
 .candidates__inner-wrapper {
@@ -425,10 +500,6 @@ onMounted(async () => {
   background: #888;
   border-radius: 8px;
   border: 2px solid #f1f1f1;
-}
-
-.candidates__inner-wrapper::-webkit-scrollbar-thumb:hover {
-  background: #555;
 }
 
 .candidate {
@@ -478,11 +549,11 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  padding: 0.75rem;
+  padding: 0.5rem 0.75rem; /* Reduced padding */
 }
 
 .navigation__control-btns {
-  padding: 0.5rem;
+  padding: 0.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -493,7 +564,7 @@ onMounted(async () => {
   padding: 0.5rem 0.75rem;
   font-size: 0.8rem;
   cursor: pointer;
-  border: 1px solid#ddd;
+  border: 1px solid #ddd;
   border-radius: 4px;
   background: white;
   transition: all 0.3s ease;
@@ -557,7 +628,7 @@ onMounted(async () => {
   color: white;
   font-weight: bold;
   border: none;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem; /* Reduced */
 }
 
 .nav__btn.submit:hover:not(:disabled) {
@@ -579,40 +650,14 @@ onMounted(async () => {
   .section__title {
     font-size: 1.3rem;
   }
-
   .votes {
     font-size: 0.85rem;
   }
-
   .candidates__layout {
-    padding: 1rem;
+    padding: 0.75rem 1rem;
   }
-
-  .legend {
-    font-size: 0.95rem;
-    margin-bottom: 0.75rem;
-    padding-inline: 1rem;
-  }
-
-  .total__candidates {
-    font-size: 0.85rem;
-    padding-inline: 1rem;
-  }
-
-  .candidates__inner-wrapper {
-    height: 300px;
-    gap: 1rem;
-    padding-inline: 1rem;
-  }
-
-  .candidate {
-    max-width: 240px;
-    min-width: 240px;
-    max-height: 280px;
-  }
-
-  .candidate__info {
-    font-size: 0.75rem;
+  .poll__main-content {
+    height: calc(100dvh - 250px);
   }
 }
 
@@ -620,54 +665,29 @@ onMounted(async () => {
   .section__title {
     font-size: 1.8rem;
   }
-
   .votes {
     font-size: 1.2rem;
   }
-
   .candidates__layout {
-    padding: 0 1rem 2rem;
-    gap: 2rem;
+    padding: 0 1rem 1.5rem;
+    gap: 1.5rem;
   }
-
-  .legend {
-    margin-top: 1rem;
-    font-size: 1.1rem;
-  }
-
   .nav__btn {
     padding: 0.75rem 1rem;
     font-size: 1rem;
   }
-
   .progress__nums {
     width: 30px;
     height: 30px;
     border-radius: 50%;
     font-size: 0.8rem;
   }
-
   .candidates__inner-wrapper {
     height: 350px;
-    gap: 1rem;
-  }
-
-  .candidate {
-    max-width: 320px;
-    min-width: 320px;
-    max-height: 320px;
-  }
-
-  .candidate__info {
-    font-size: 0.85rem;
-  }
-
-  .total__candidates {
-    margin-bottom: 0;
   }
 }
 
-/* Confirmation Modal Styles */
+/* Confirmation Modal Styles kept as provided */
 .confirmation__overlay {
   position: fixed;
   top: 0;
