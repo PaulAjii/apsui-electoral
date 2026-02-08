@@ -1,11 +1,12 @@
 import Vote from "./models/Vote.js";
 import Users from "./models/Users.js";
+import Candidate from "./models/Candidate.js";
 import connectDB from './config/conn.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const usersToDelete = ['248782', '243162', '243163', '235353', '235354', '229516', '229517', '220758', '220759', '248781', '248783'];
+const usersToDelete = ['248782', '243162', '243163', '235353', '235354', '229516', '229517', '220758', '220759', '248781', '248783', '242054'];
 
 const deleteUsers = async () => {
     try {
@@ -14,6 +15,7 @@ const deleteUsers = async () => {
         await Users.deleteMany({ studentId: { $in: usersToDelete } });
         await Users.updateMany({ role: { $ne: 'admin' } }, { $set: { hasVoted: false }});
         await Vote.deleteMany({});
+        await Users.updateMany({ role: { $ne: 'admin' }}, { $set: { votedPositions: [] } });
 
         console.log('Specified users and all votes have been deleted successfully!');
         process.exit(0);
