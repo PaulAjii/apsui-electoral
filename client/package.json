@@ -11,6 +11,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.6.1",
     "axios": "^1.7.9",
     "dokugen": "^3.9.0",
     "gsap": "^3.12.5",
